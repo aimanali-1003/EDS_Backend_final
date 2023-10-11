@@ -11,14 +11,23 @@ namespace EDS_Backend_final.Models
         [MaxLength(255)]
         public string FrequencyType { get; set; }
 
-        public TimeOnly? Time { get; set; }
+        [DataType(DataType.Time)]
+        public DateTime? Time { get; set; }
 
-        public DateOnly? Date { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? Date { get; set; }
 
-        public int[]? DaysOfWeek { get; set; }
+        public ICollection<DayOfWeek>? DaysOfWeek { get; set; }
 
         public int DateOfMonth { get; set; }
 
         public List<Job> Jobs { get; set; }
     }
+
+    public class DayOfWeek
+    {
+        public int DayOfWeekId { get; set; }
+        public int DayValue { get; set; }
+    }
+
 }

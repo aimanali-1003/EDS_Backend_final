@@ -38,6 +38,7 @@ namespace EDS_Backend_final.Models
 
         public Criteria Criteria { get; set; }
 
+        public int TemplateID { get; set; }
         public Template Template { get; set; }
 
         public Frequency Frequency { get; set; }
@@ -46,6 +47,6 @@ namespace EDS_Backend_final.Models
 
         public List<JobLog> JobLogID { get; set; }
 
-        public List<Job_Status> JobStatuses { get; set; }
+        public List<JobStatus> JobStatuses { get; set; }
     }
 }

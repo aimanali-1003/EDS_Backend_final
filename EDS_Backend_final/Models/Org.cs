@@ -19,8 +19,7 @@ namespace EDS_Backend_final.Models
         public string OrganizationLevel { get; set; }
 
         public List<Client> Clients { get; set; }
-
-        // Add a property to represent levels and sublevels
-        public List<Org_lvl> Levels { get; set; }
+         
+        public List<OrgLevel> Levels { get; set; }
     }
 }
