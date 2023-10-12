@@ -3,7 +3,7 @@ using EDS_Backend_final.Models;
 
 namespace EDS_Backend_final.ViewModels
 {
-    public class CategoryViewModel : AuditableEntity
+    public class CategoryViewModel
     {
         [Key]
         public int CategoryID { get; set; }
@@ -14,5 +14,6 @@ namespace EDS_Backend_final.ViewModels
         [Required]
         [MaxLength(255)]
         public string CategoryName { get; set; }
+
     }
 }

@@ -44,20 +44,28 @@ namespace EDS_Backend_final.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var categorys = _mapper.Map<Category>(category);
-            var createdCategory = await _categoryService.CreateCategoryAsync(categorys);
-            var createdCategoryViewModel = _mapper.Map<CategoryViewModel>(createdCategory);
-            return CreatedAtAction(nameof(GetCategory), new { id = createdCategoryViewModel.CategoryID }, createdCategoryViewModel);
+
+            var createdCategory = await _categoryService.CreateCategoryAsync(_mapper.Map<Category>(category));
+            return CreatedAtAction(nameof(GetCategory), new { id = createdCategory.CategoryID }, _mapper.Map<CategoryViewModel>(createdCategory));
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryViewModel categoryVM)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var category = _mapper.Map<Category>(categoryVM);
             var updatedCategory = await _categoryService.UpdateCategoryAsync(id, category);
             if (updatedCategory == null)
+            {
                 return NotFound();
+            }
+            var updatedCategoryVM = _mapper.Map<CategoryViewModel>(updatedCategory);
 
-            return Ok(updatedCategory);
+            return Ok(updatedCategoryVM);
         }
 
         [HttpDelete("{id}")]

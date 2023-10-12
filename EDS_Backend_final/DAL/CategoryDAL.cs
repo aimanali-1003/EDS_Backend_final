@@ -10,7 +10,7 @@ namespace EDS_Backend_final.DataAccess
 {
     public class CategoryDAL
     {
-        private readonly DBContext _dbContext; // Replace 'YourDbContext' with your actual DbContext class
+        private readonly DBContext _dbContext;
 
         public CategoryDAL(DBContext dbContext) // Inject the DbContext through the constructor
         {
@@ -31,6 +31,8 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<Category> CreateCategoryAsync(Category category)
         {
+            category.CreatedAt = DateTime.Now;
+            category.CreatedBy = "Zamaan";
             // Implement logic to create a new category in your database
             _dbContext.Categories.Add(category);
             await _dbContext.SaveChangesAsync();
@@ -48,6 +50,7 @@ namespace EDS_Backend_final.DataAccess
             existingCategory.CategoryCode = category.CategoryCode;
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.UpdatedAt = DateTime.Now; // Set the updated timestamp
+            existingCategory.UpdatedBy = category.UpdatedBy;
 
             await _dbContext.SaveChangesAsync();
             return existingCategory;
