@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EDS_Backend_final.Models;
 using EDS_Backend_final.ViewModels;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 public class AutoMapperProfile : Profile
 {
@@ -11,6 +12,20 @@ public class AutoMapperProfile : Profile
         CreateMap<CategoryViewModel, Category>()
             .ForMember(dest => dest.CategoryID, opt => opt.Ignore()) // Assuming you want to ignore CategoryID
             .ReverseMap();
+
+        // Assuming you have an OrgViewModel and Org model
+        CreateMap<OrgVM, Org>()
+            .ForMember(dest => dest.OrganizationID, opt => opt.Ignore()) // Assuming you want to ignore OrganizationID
+            .ReverseMap();
+
+        CreateMap<ClientViewModel, Client>()
+           .ForMember(dest => dest.ClientID, opt => opt.Ignore()) // Assuming you want to ignore ClientID
+           .ReverseMap();
+
+        CreateMap<ColumnViewModel, Columns>()
+           .ForMember(dest => dest.ColumnsID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
+           .ReverseMap();
+
         // Add other mappings as needed
     }
 }

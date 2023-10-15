@@ -10,6 +10,26 @@ namespace EDS_Backend_final.DataContext
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryViewModel> CategoriesVM { get; set; }
 
+        public DbSet<Org> Org { get; set; }
+
+        public DbSet<OrgVM> OrgVM { get; set; }
+
+        public DbSet<Client> Client { get; set; }
+
+        public DbSet<Columns> Columns { get; set; }
+
+        public DbSet<Criteria> Criteria { get; set; }
+        public DbSet<DataRecipient> DataRecipient { get; set; }
+        public DbSet<Frequency> Frequency { get; set; }
+        public DbSet<Job> Job { get; set; }
+        public DbSet<JobLog> JobLog { get; set; }
+        public DbSet<JobStatus> JobStatus { get; set; }
+        public DbSet<Lookup> Lookup { get; set; }
+        public DbSet<NotificationRecipient> NotificationRecipient { get; set; }
+        public DbSet<OrgLevel> OrgLevel { get; set; }
+        public DbSet<TemplateColumns> TemplateColumns { get; set; }
+        public DbSet<Template> Template { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -28,10 +48,6 @@ namespace EDS_Backend_final.DataContext
         .WithMany(t => t.Jobs)
         .HasForeignKey(j => j.TemplateID)
         .OnDelete(DeleteBehavior.Restrict);
-
-
-
-
 
         }
 
