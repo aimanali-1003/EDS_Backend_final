@@ -32,6 +32,7 @@ namespace EDS_Backend_final.DataAccess
         {
             client.CreatedAt = DateTime.Now;
             client.CreatedBy = "Zamaan";
+
             // Implement logic to create a new client in your database
             _dbContext.Client.Add(client);
             await _dbContext.SaveChangesAsync();
@@ -64,6 +65,21 @@ namespace EDS_Backend_final.DataAccess
             _dbContext.Client.Remove(client);
             await _dbContext.SaveChangesAsync();
             return true; // Deletion was successful
+        }
+
+        public async Task<Org> GetOrgByIdAsync(int organizationId)
+        {
+            try
+            {
+                var org = await _dbContext.Org.FindAsync(organizationId);
+                return org;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., log or throw a custom exception)
+                // You can also return null or a default value if organization not found
+                throw;
+            }
         }
     }
 }

@@ -26,6 +26,16 @@ public class AutoMapperProfile : Profile
            .ForMember(dest => dest.ColumnsID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
            .ReverseMap();
 
+        CreateMap<TemplateViewModel, Template>()
+          .ForMember(dest => dest.TemplateID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
+          .ReverseMap();
+
+        //CreateMap<CategoryColumnDTO, Columns>()
+        //   .ForMember(dest => dest.ColumnsID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
+        //   .ReverseMap();
+
+
+
         // Add other mappings as needed
     }
 }

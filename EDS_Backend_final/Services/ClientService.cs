@@ -40,5 +40,10 @@ namespace EDS_Backend_final.Services
         {
             return await _clientDAL.DeleteClientAsync(id);
         }
+
+        public async Task<Org> GetOrgByIdAsync(int organizationId)
+        {
+            return await _clientDAL.GetOrgByIdAsync(organizationId);
+        }
     }
 }

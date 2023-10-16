@@ -4,6 +4,7 @@ using EDS_Backend_final.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDS_Backend_final.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231015133543_AddColumnsToCategory")]
+    partial class AddColumnsToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace EDS_Backend_final.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CategoryColumns", b =>
-                {
-                    b.Property<int>("CategoriesCategoryID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ColumnsID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesCategoryID", "ColumnsID");
-
-                    b.HasIndex("ColumnsID");
-
-                    b.ToTable("CategoryColumns");
-                });
 
             modelBuilder.Entity("DayOfWeekFrequency", b =>
                 {
@@ -72,6 +60,9 @@ namespace EDS_Backend_final.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int?>("ColumnsID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -86,6 +77,8 @@ namespace EDS_Backend_final.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryID");
+
+                    b.HasIndex("ColumnsID");
 
                     b.ToTable("Categories");
                 });
@@ -847,21 +840,6 @@ namespace EDS_Backend_final.Migrations
                     b.ToTable("OrgVM");
                 });
 
-            modelBuilder.Entity("CategoryColumns", b =>
-                {
-                    b.HasOne("EDS_Backend_final.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesCategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EDS_Backend_final.Models.Columns", null)
-                        .WithMany()
-                        .HasForeignKey("ColumnsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DayOfWeekFrequency", b =>
                 {
                     b.HasOne("EDS_Backend_final.Models.DayOfWeek", null)
@@ -875,6 +853,13 @@ namespace EDS_Backend_final.Migrations
                         .HasForeignKey("FrequencyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EDS_Backend_final.Models.Category", b =>
+                {
+                    b.HasOne("EDS_Backend_final.Models.Columns", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ColumnsID");
                 });
 
             modelBuilder.Entity("EDS_Backend_final.Models.Client", b =>
@@ -1061,6 +1046,8 @@ namespace EDS_Backend_final.Migrations
 
             modelBuilder.Entity("EDS_Backend_final.Models.Columns", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("TemplateColumns");
                 });
 

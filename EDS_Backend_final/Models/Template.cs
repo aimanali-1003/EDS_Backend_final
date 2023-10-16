@@ -14,8 +14,8 @@ namespace EDS_Backend_final.Models
         // Navigation property for the associated Category
         public Category Category { get; set; }
 
-        public List<TemplateColumns> TemplateColumns { get; set; }
+        public List<TemplateColumns>? TemplateColumns { get; set; }
 
-        public List<Job> Jobs { get; set; }
+        public List<Job>? Jobs { get; set; }
     }
 }

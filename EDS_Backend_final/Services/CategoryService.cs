@@ -40,5 +40,16 @@ namespace EDS_Backend_final.Services
         {
             return await _categoryDAL.DeleteCategoryAsync(id);
         }
+
+        //public async Task<IEnumerable<Columns>> GetCategoryColumnsAsync(int categoryId)
+        //{
+        //    // Implement logic to call the CategoryDAL's GetCategoryColumnsAsync method
+        //    return await _categoryDAL.GetCategoryColumnsAsync(categoryId);
+        //}
+
+        //public async Task<IEnumerable<Category>> GetCategoriesWithColumnsAsync()
+        //{
+        //    return await _categoryDAL.GetCategoriesWithColumnsAsync();
+        //}
     }
 }

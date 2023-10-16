@@ -1,4 +1,6 @@
 ﻿using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,5 +13,8 @@ namespace EDS_Backend_final.Interfaces
         Task<Template> CreateTemplateAsync(Template template);
         Task<Template> UpdateTemplateAsync(int id, Template template);
         Task<bool> DeleteTemplateAsync(int id);
+
+        Task<Category> GetOrgByIdAsync(int categoryID);
+
     }
 }

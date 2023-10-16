@@ -1,5 +1,7 @@
 ﻿using EDS_Backend_final.DataContext;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -65,5 +67,21 @@ namespace EDS_Backend_final.DataAccess
             await _dbContext.SaveChangesAsync();
             return true; // Deletion was successful
         }
+
+        public async Task<Category> GetOrgByIdAsync(int categoryID)
+        {
+            try
+            {
+                var category = await _dbContext.Categories.FindAsync(categoryID);
+                return category;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions (e.g., log or throw a custom exception)
+                // You can also return null or a default value if organization not found
+                throw;
+            }
+        }
+
     }
 }

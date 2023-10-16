@@ -1,6 +1,7 @@
 ﻿using EDS_Backend_final.DataAccess;
 using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,11 @@ namespace EDS_Backend_final.Services
         public async Task<bool> DeleteColumnAsync(int id)
         {
             return await _columnDAL.DeleteColumnAsync(id);
+        }
+
+        public async Task<List<CategoryColumnDTO>> GetColumnsByCategoryAsync(int categoryId)
+        {
+            return await _columnDAL.GetColumnsByCategoryAsync(categoryId);
         }
     }
 }

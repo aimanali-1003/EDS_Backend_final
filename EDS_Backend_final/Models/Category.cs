@@ -14,6 +14,7 @@ namespace EDS_Backend_final.Models
         [MaxLength(255)]
         public string CategoryName { get; set; }
 
+        public List<Columns> Columns { get; set; }
         public List<Template>? Templates { get; set; }
     }
 

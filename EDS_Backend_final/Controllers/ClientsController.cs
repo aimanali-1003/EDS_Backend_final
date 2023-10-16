@@ -47,8 +47,21 @@ namespace EDS_Backend_final.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var org = await _clientService.GetOrgByIdAsync(client.OrganizationID);
 
-            var createdClient = await _clientService.CreateClientAsync(_mapper.Map<Client>(client));
+            if (org == null)
+            {
+                return NotFound("Organization not found");
+            }
+
+            var clientEntity = new Client
+            {
+                ClientName = client.ClientName,
+                ClientCode = client.ClientCode,
+                Orgs = org // Assign the Org instance to the Client's Orgs navigation property
+            };
+
+            var createdClient = await _clientService.CreateClientAsync(_mapper.Map<Client>(clientEntity));
             return CreatedAtAction(nameof(GetClient), new { id = createdClient.ClientID }, _mapper.Map<ClientViewModel>(createdClient));
         }
 

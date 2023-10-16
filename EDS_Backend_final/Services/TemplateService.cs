@@ -1,6 +1,8 @@
 ﻿using EDS_Backend_final.DataAccess;
 using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -40,5 +42,13 @@ namespace EDS_Backend_final.Services
         {
             return await _templateDAL.DeleteTemplateAsync(id);
         }
+
+        public async Task<Category> GetOrgByIdAsync(int categoryID)
+        {
+            return await _templateDAL.GetOrgByIdAsync(categoryID);
+        }
+
+      
+
     }
 }

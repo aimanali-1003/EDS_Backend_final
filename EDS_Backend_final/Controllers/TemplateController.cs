@@ -40,15 +40,32 @@ namespace EDS_Backend_final.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTemplate([FromBody] Template template)
+        public async Task<IActionResult> CreateTemplate([FromBody] TemplateViewModel template)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var createdTemplate = await _templateService.CreateTemplateAsync(_mapper.Map<Template>(template));
-            return CreatedAtAction(nameof(GetTemplate), new { id = createdTemplate.TemplateID }, _mapper.Map<Template>(createdTemplate));
+            var category = await _templateService.GetOrgByIdAsync(template.CategoryID);
+
+            if (category == null)
+            {
+                return NotFound("Category not found");
+            }
+
+            var templateEntity = new Template
+            {
+                TemplateName = template.TemplateName,
+                Category = category
+            };
+
+            var createdTemplate = await _templateService.CreateTemplateAsync(_mapper.Map<Template>(templateEntity));
+
+            // Include the column names in the response
+            var templateViewModel = _mapper.Map<TemplateViewModel>(createdTemplate);
+
+            return CreatedAtAction(nameof(GetTemplate), new { id = createdTemplate.TemplateID }, templateViewModel);
         }
 
         [HttpPut("{id}")]
@@ -78,5 +95,7 @@ namespace EDS_Backend_final.Controllers
 
             return NoContent();
         }
+
+
     }
 }

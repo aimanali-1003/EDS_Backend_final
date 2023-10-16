@@ -1,5 +1,6 @@
 ﻿using EDS_Backend_final.DataContext;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -69,5 +70,26 @@ namespace EDS_Backend_final.DataAccess
             await _dbContext.SaveChangesAsync();
             return true; // Deletion was successful
         }
+
+        public async Task<List<CategoryColumnDTO>> GetColumnsByCategoryAsync(int categoryId)
+        {
+            // Replace YourTable with the actual table name and CategoryID with the appropriate column name.
+            string sqlQuery = $"SELECT ColumnsID, ColumnName FROM Columns WHERE CategoryID = {categoryId}";
+            //string sqlQuery = "SELECT ColumnsID, ColumnName FROM YourTable WHERE CategoryID = {categoryId}";
+            var result = _dbContext.Columns.FromSqlRaw(sqlQuery).Select(c => new { c.ColumnsID, c.ColumnName, Active = true }).ToList();
+
+
+            //var result = await _dbContext.Columns.FromSqlRaw(sqlQuery).ToListAsync();
+
+            // Map the results to the custom DTO.
+            var categoryColumns = result.Select(column => new CategoryColumnDTO
+            {
+                ColumnID = column.ColumnsID,
+                ColumnName = column.ColumnName
+            }).ToList();
+
+            return categoryColumns;
+        }
+
     }
 }

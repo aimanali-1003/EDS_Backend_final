@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.Services;
 using EDS_Backend_final.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +14,19 @@ namespace EDS_Backend_final.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
+        private readonly IColumnService _columnService;
 
-        public CategoryController(ICategoryService categoryService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService, IMapper mapper, IColumnService columnService)
         {
             _categoryService = categoryService;
             _mapper = mapper;
+            _columnService = columnService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
+              var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 
@@ -77,6 +80,22 @@ namespace EDS_Backend_final.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("category-columns/{categoryId}")]
+        public async Task<IActionResult> GetCategoryColumns(int categoryId)
+        {
+            var categoryColumns = await _columnService.GetColumnsByCategoryAsync(categoryId);
+
+            if (categoryColumns == null || !categoryColumns.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(categoryColumns);
+        }
+
+
+
     }
 
 }

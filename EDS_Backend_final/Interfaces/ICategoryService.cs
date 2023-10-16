@@ -11,5 +11,8 @@ namespace EDS_Backend_final.Interfaces
         Task<Category> CreateCategoryAsync(Category category);
         Task<Category> UpdateCategoryAsync(int id, Category category);
         Task<bool> DeleteCategoryAsync(int id);
+
+        //Task<IEnumerable<Columns>> GetCategoryColumnsAsync(int categoryId);
+        //Task<IEnumerable<Category>> GetCategoriesWithColumnsAsync();
     }
 }

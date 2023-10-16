@@ -14,7 +14,10 @@ namespace EDS_Backend_final.Models
         [MaxLength(255)]
         public string ColumnCode { get; set; }
 
-        public List<Category> Categories { get; set; }
+        public int CategoryID { get; set; }
+
+        // Navigation property to represent the many-to-one relationship with Category
+        public Category Category { get; set; }
 
         public List<TemplateColumns> TemplateColumns { get; set; }
     }
