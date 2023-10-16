@@ -14,5 +14,7 @@ namespace EDS_Backend_final.ViewModels
         [Required]
 
         public int OrganizationID { get; set; }
+
+        public bool? Active { get; set; }
     }
 }

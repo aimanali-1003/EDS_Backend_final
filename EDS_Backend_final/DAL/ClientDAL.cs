@@ -49,7 +49,8 @@ namespace EDS_Backend_final.DataAccess
             // Update the properties of the existing client with the new data
             existingClient.ClientName = client.ClientName;
             existingClient.UpdatedAt = DateTime.Now; // Set the updated timestamp
-            existingClient.UpdatedBy = client.UpdatedBy;
+            existingClient.UpdatedBy = "Zamaan";
+            existingClient.Active = client.Active;
 
             await _dbContext.SaveChangesAsync();
             return existingClient;

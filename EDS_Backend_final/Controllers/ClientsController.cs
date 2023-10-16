@@ -66,22 +66,43 @@ namespace EDS_Backend_final.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClient(int id, [FromBody] ClientViewModel clientVM)
+        public async Task<IActionResult> UpdateClient(int id, [FromBody] UpdateClientVM clientVM)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var client = _mapper.Map<Client>(clientVM);
-            var updatedClient = await _clientService.UpdateClientAsync(id, client);
-            if (updatedClient == null)
+
+            // Fetch the existing client from the database
+            var existingClient = await _clientService.GetClientAsync(id);
+            if (existingClient == null)
             {
                 return NotFound();
             }
-            var updatedClientVM = _mapper.Map<ClientViewModel>(updatedClient);
+
+            // Fetch the organization based on the provided organization ID in the clientVM
+            var org = await _clientService.GetOrgByIdAsync(clientVM.OrganizationID);
+
+            if (org == null)
+            {
+                return NotFound("Organization not found");
+            }
+
+            // Update the client's properties, including the organization
+            existingClient.ClientName = clientVM.ClientName;
+            existingClient.ClientCode = clientVM.ClientCode;
+            existingClient.Active = clientVM.Active;
+            existingClient.Orgs = org; // Update the relationship with the organization
+
+            // Save the changes to the database
+            var updatedClient = await _clientService.UpdateClientAsync(id, existingClient);
+
+            // Map the updated client to the view model and return it
+            var updatedClientVM = _mapper.Map<UpdateClientVM>(updatedClient);
 
             return Ok(updatedClientVM);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClient(int id)
