@@ -82,6 +82,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.MaxDepth = 32; // Adjust the depth as needed
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

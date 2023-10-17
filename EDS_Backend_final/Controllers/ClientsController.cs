@@ -113,5 +113,20 @@ namespace EDS_Backend_final.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("{clientId}/Organizations")]
+        public async Task<IActionResult> GetOrganizationsForClient(int clientId)
+        {
+            try
+            {
+                var orgViewModels = await _clientService.GetOrganizationsForClientAsync(clientId);
+                return Ok(orgViewModels);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately (e.g., log or return an error response)
+                return StatusCode(500, "An error occurred while retrieving organizations for the client.");
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace EDS_Backend_final.Services
 
         public async Task<Category> UpdateCategoryAsync(int id, Category category)
         {
-            return await _categoryDAL.UpdateCategoryAsync(id, category);
+       return await _categoryDAL.UpdateCategoryAsync(id, category);
         }
 
         public async Task<bool> DeleteCategoryAsync(int id)

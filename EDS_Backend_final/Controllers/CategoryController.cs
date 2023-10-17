@@ -37,8 +37,10 @@ namespace EDS_Backend_final.Controllers
             if (category == null)
                 return NotFound();
 
-            return Ok(category);
+            var categoryViewModel = _mapper.Map<CategoryViewModel>(category);
+            return Ok(categoryViewModel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryViewModel category)
@@ -54,7 +56,7 @@ namespace EDS_Backend_final.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryViewModel categoryVM)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryUpdateVM categoryVM)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +68,7 @@ namespace EDS_Backend_final.Controllers
             {
                 return NotFound();
             }
-            var updatedCategoryVM = _mapper.Map<CategoryViewModel>(updatedCategory);
+            var updatedCategoryVM = _mapper.Map<CategoryUpdateVM>(updatedCategory);
 
             return Ok(updatedCategoryVM);
         }

@@ -1,5 +1,6 @@
 ﻿using EDS_Backend_final.DataContext;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,34 @@ namespace EDS_Backend_final.DataAccess
             {
                 // Handle exceptions (e.g., log or throw a custom exception)
                 // You can also return null or a default value if organization not found
+                throw;
+            }
+        }
+
+        public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
+        {
+            try
+            {
+                var orgViewModels = await _dbContext.Client
+                    .Where(c => c.ClientID == clientId)
+                    .Join(
+                        _dbContext.Org,
+                        client => client.Orgs.OrganizationID,
+                        org => org.OrganizationID,
+                        (client, org) => new OrgVM
+                        {
+                            OrganizationID = org.OrganizationID,
+                            OrganizationCode = org.OrganizationCode,
+                            OrganizationLevel = org.OrganizationLevel
+                        }
+                    )
+                    .ToListAsync();
+
+                return orgViewModels;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
                 throw;
             }
         }

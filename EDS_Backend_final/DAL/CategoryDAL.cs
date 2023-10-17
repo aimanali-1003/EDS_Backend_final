@@ -33,6 +33,7 @@ namespace EDS_Backend_final.DataAccess
         {
             category.CreatedAt = DateTime.Now;
             category.CreatedBy = "Zamaan";
+            category.Active = true;
             // Implement logic to create a new category in your database
             _dbContext.Categories.Add(category);
             await _dbContext.SaveChangesAsync();

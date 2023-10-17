@@ -1,4 +1,5 @@
 ﻿using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,5 +14,8 @@ namespace EDS_Backend_final.Interfaces
         Task<bool> DeleteClientAsync(int id);
 
         Task<Org> GetOrgByIdAsync(int organizationId);
+
+        Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId);
+
     }
 }
