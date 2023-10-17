@@ -33,6 +33,7 @@ namespace EDS_Backend_final.DataAccess
         {
             client.CreatedAt = DateTime.Now;
             client.CreatedBy = "Zamaan";
+            client.Active = true;
 
             // Implement logic to create a new client in your database
             _dbContext.Client.Add(client);
