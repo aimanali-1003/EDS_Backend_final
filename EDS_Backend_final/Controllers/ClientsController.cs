@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EDS_Backend_final.Exceptions;
 using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
 using EDS_Backend_final.ViewModels;
@@ -47,22 +48,31 @@ namespace EDS_Backend_final.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var org = await _clientService.GetOrgByIdAsync(client.OrganizationID);
-
-            if (org == null)
+            try
             {
-                return NotFound("Organization not found");
+                var org = await _clientService.GetOrgByIdAsync(client.OrganizationID);
+
+                if (org == null)
+                {
+                    return NotFound("Organization not found");
+                }
+
+                var clientEntity = new Client
+                {
+                    ClientName = client.ClientName,
+                    ClientCode = client.ClientCode,
+                    Orgs = org // Assign the Org instance to the Client's Orgs navigation property
+                };
+
+                var createdClient = await _clientService.CreateClientAsync(_mapper.Map<Client>(clientEntity));
+                return CreatedAtAction(nameof(GetClient), new { id = createdClient.ClientID }, _mapper.Map<ClientViewModel>(createdClient));
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            var clientEntity = new Client
-            {
-                ClientName = client.ClientName,
-                ClientCode = client.ClientCode,
-                Orgs = org // Assign the Org instance to the Client's Orgs navigation property
-            };
 
-            var createdClient = await _clientService.CreateClientAsync(_mapper.Map<Client>(clientEntity));
-            return CreatedAtAction(nameof(GetClient), new { id = createdClient.ClientID }, _mapper.Map<ClientViewModel>(createdClient));
         }
 
         [HttpPut("{id}")]
@@ -72,35 +82,28 @@ namespace EDS_Backend_final.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            // Fetch the existing client from the database
-            var existingClient = await _clientService.GetClientAsync(id);
-            if (existingClient == null)
+            try
             {
-                return NotFound();
+                var client = _mapper.Map<Client>(clientVM);
+
+                var org = await _clientService.GetOrgByIdAsync(clientVM.OrganizationID);
+
+                if (org == null)
+                {
+                    return NotFound("Organization not found");
+                }
+
+                var updatedClient = await _clientService.UpdateClientAsync(id, client);
+
+                var updatedClientVM = _mapper.Map<UpdateClientVM>(updatedClient);
+
+                return Ok(updatedClientVM);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            // Fetch the organization based on the provided organization ID in the clientVM
-            var org = await _clientService.GetOrgByIdAsync(clientVM.OrganizationID);
-
-            if (org == null)
-            {
-                return NotFound("Organization not found");
-            }
-
-            // Update the client's properties, including the organization
-            existingClient.ClientName = clientVM.ClientName;
-            existingClient.ClientCode = clientVM.ClientCode;
-            existingClient.Active = clientVM.Active;
-            existingClient.Orgs = org; // Update the relationship with the organization
-
-            // Save the changes to the database
-            var updatedClient = await _clientService.UpdateClientAsync(id, existingClient);
-
-            // Map the updated client to the view model and return it
-            var updatedClientVM = _mapper.Map<UpdateClientVM>(updatedClient);
-
-            return Ok(updatedClientVM);
         }
 
 

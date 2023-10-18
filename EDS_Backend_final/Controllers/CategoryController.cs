@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EDS_Backend_final.Exceptions;
 using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
 using EDS_Backend_final.Services;
@@ -45,13 +46,22 @@ namespace EDS_Backend_final.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryViewModel category)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var createdCategory = await _categoryService.CreateCategoryAsync(_mapper.Map<Category>(category));
+                return CreatedAtAction(nameof(GetCategory), new { id = createdCategory.CategoryID }, _mapper.Map<CategoryViewModel>(createdCategory));
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            var createdCategory = await _categoryService.CreateCategoryAsync(_mapper.Map<Category>(category));
-            return CreatedAtAction(nameof(GetCategory), new { id = createdCategory.CategoryID }, _mapper.Map<CategoryViewModel>(createdCategory));
+
         }
 
 
@@ -62,15 +72,23 @@ namespace EDS_Backend_final.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var category = _mapper.Map<Category>(categoryVM);
-            var updatedCategory = await _categoryService.UpdateCategoryAsync(id, category);
-            if (updatedCategory == null)
+            try
             {
-                return NotFound();
-            }
-            var updatedCategoryVM = _mapper.Map<CategoryUpdateVM>(updatedCategory);
+                var category = _mapper.Map<Category>(categoryVM);
+                var updatedCategory = await _categoryService.UpdateCategoryAsync(id, category);
+                if (updatedCategory == null)
+                {
+                    return NotFound();
+                }
+                var updatedCategoryVM = _mapper.Map<CategoryUpdateVM>(updatedCategory);
 
-            return Ok(updatedCategoryVM);
+                return Ok(updatedCategoryVM);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpDelete("{id}")]

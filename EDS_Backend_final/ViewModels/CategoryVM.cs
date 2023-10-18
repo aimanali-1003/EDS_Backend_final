@@ -15,5 +15,7 @@ namespace EDS_Backend_final.ViewModels
         [MaxLength(255)]
         public string CategoryName { get; set; }
 
+        public bool? Active { get; set; }
+
     }
 }

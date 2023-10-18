@@ -14,7 +14,7 @@ namespace EDS_Backend_final.DataContext
 
         public DbSet<OrgVM> OrgVM { get; set; }
 
-        public DbSet<Client> Client { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         public DbSet<Columns> Columns { get; set; }
 
