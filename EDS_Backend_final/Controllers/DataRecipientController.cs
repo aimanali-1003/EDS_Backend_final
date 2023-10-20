@@ -78,5 +78,14 @@ namespace EDS_Backend_final.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("datarecipienttypes")]
+        public async Task<IActionResult> GetDataRecipientTypes()
+        {
+            var dataRecipientTypes = await _dataRecipientService.GetAllDataRecipientTypesAsync();
+            return Ok(dataRecipientTypes);
+        }
+
+
     }
 }

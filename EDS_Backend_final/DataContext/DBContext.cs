@@ -16,6 +16,8 @@ namespace EDS_Backend_final.DataContext
 
         public DbSet<Client> Clients { get; set; }
 
+        public DbSet<DataRecipientType> DataRecipientType { get; set; }
+
         public DbSet<Columns> Columns { get; set; }
 
         public DbSet<Criteria> Criteria { get; set; }

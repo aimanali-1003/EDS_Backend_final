@@ -40,5 +40,10 @@ namespace EDS_Backend_final.Services
         {
             return await _dataRecipientDAL.DeleteDataRecipientAsync(id);
         }
+
+        public async Task<IEnumerable<DataRecipientType>> GetAllDataRecipientTypesAsync()
+        {
+            return await _dataRecipientDAL.GetAllDataRecipientTypesAsync();
+        }
     }
 }

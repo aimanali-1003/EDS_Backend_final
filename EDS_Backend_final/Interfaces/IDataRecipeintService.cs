@@ -11,5 +11,7 @@ namespace EDS_Backend_final.Interfaces
         Task<DataRecipient> CreateDataRecipientAsync(DataRecipient dataRecipient);
         Task<DataRecipient> UpdateDataRecipientAsync(int id, DataRecipient dataRecipient);
         Task<bool> DeleteDataRecipientAsync(int id);
+
+        Task<IEnumerable<DataRecipientType>> GetAllDataRecipientTypesAsync();
     }
 }
