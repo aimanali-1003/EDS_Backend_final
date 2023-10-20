@@ -6,6 +6,9 @@ using EDS_Backend_final.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using EDS_Backend_final.DataAccess;
+using EDS_Backend_final.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace EDS_Backend_final.Controllers
 {
@@ -15,11 +18,15 @@ namespace EDS_Backend_final.Controllers
     {
         private readonly ITemplateService _templateService;
         private readonly IMapper _mapper;
+        private readonly TemplateColDAL _templateColumnsDAL;
+        private readonly DBContext _dbContext;
 
-        public TemplateController(ITemplateService templateService, IMapper mapper)
+        public TemplateController(ITemplateService templateService, IMapper mapper, TemplateColDAL templateColumnsDAL, DBContext dbContext)
         {
             _templateService = templateService;
             _mapper = mapper;
+            _templateColumnsDAL = templateColumnsDAL;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -40,14 +47,14 @@ namespace EDS_Backend_final.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTemplate([FromBody] TemplateViewModel template)
+        public async Task<IActionResult> CreateTemplate([FromBody] TemplateViewModel templateData)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var category = await _templateService.GetOrgByIdAsync(template.CategoryID);
+            var category = await _templateService.GetOrgByIdAsync(templateData.CategoryID);
 
             if (category == null)
             {
@@ -56,7 +63,7 @@ namespace EDS_Backend_final.Controllers
 
             var templateEntity = new Template
             {
-                TemplateName = template.TemplateName,
+                TemplateName = templateData.TemplateName,
                 Category = category
             };
 
@@ -65,8 +72,20 @@ namespace EDS_Backend_final.Controllers
             // Include the column names in the response
             var templateViewModel = _mapper.Map<TemplateViewModel>(createdTemplate);
 
+            int templateId = templateViewModel.TemplateID;
+
+            // Call the TemplateColDAL to create template columns
+            var templateColumnsCreated = await _templateColumnsDAL.CreateTemplateColumnsAsync(templateId, templateData.ColumnsId.ToArray());
+
+            if (!templateColumnsCreated)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create template columns");
+            }
+
             return CreatedAtAction(nameof(GetTemplate), new { id = createdTemplate.TemplateID }, templateViewModel);
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTemplate(int id, [FromBody] Template templateVM)
@@ -101,6 +120,27 @@ namespace EDS_Backend_final.Controllers
         {
             var lastTemplateId = await _templateService.GetLastCreatedTemplateIdAsync();
             return Ok(lastTemplateId);
+        }
+
+        [HttpGet("api/Templates/GetColumnsOfTemplate")]
+        public async Task<IActionResult> GetColumnsOfTemplate(int templateId)
+        {
+            try
+            {
+                var columns = await _dbContext.TemplateColumns
+                    .Where(tc => tc.TemplateID == templateId)
+                    .Select(tc => tc.ColumnsID)
+                    .ToListAsync();
+
+                if (columns == null || columns.Count == 0)
+                    return NotFound();
+
+                return Ok(columns);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
 
 

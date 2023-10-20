@@ -35,8 +35,8 @@ namespace EDS_Backend_final.DataAccess
         public async Task<Template> CreateTemplateAsync(Template template)
         {
             template.CreatedAt = DateTime.Now;
-            template.CreatedBy = "YourName"; // Replace with the actual creator's name
-            // Implement logic to create a new template in your database
+            template.CreatedBy = "Zamaan";
+            template.Active = true;
             _dbContext.Template.Add(template);
             await _dbContext.SaveChangesAsync();
             return template;
@@ -59,14 +59,25 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<bool> DeleteTemplateAsync(int id)
         {
-            // Implement logic to delete a template from your database
-            var template = await _dbContext.Template.FindAsync(id);
-            if (template == null)
-                return false; // Template not found
+            try
+            {
+                var templateColumns = _dbContext.TemplateColumns.Where(tc => tc.TemplateID == id);
+                _dbContext.TemplateColumns.RemoveRange(templateColumns);
 
-            _dbContext.Template.Remove(template);
-            await _dbContext.SaveChangesAsync();
-            return true; // Deletion was successful
+                var template = await _dbContext.Template.FindAsync(id);
+                if (template == null)
+                    return false; // Template not found
+
+                _dbContext.Template.Remove(template);
+                await _dbContext.SaveChangesAsync();
+                return true; // Deletion was successful
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception or log the error message
+                Console.WriteLine("Error occurred during deletion: " + ex.Message);
+                return false;
+            }
         }
 
         public async Task<Category> GetOrgByIdAsync(int categoryID)

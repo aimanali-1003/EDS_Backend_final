@@ -17,27 +17,41 @@ namespace EDS_Backend_final.DataAccess
             _dbContext = dbContext;
         }
 
-        public async Task<TemplateColumns> GetTemplateColAsync(int id)
-        {
-            // Implement logic to retrieve a template collection by ID from your database
-            return await _dbContext.TemplateColumns.FindAsync(id);
-        }
-
         public async Task<IEnumerable<TemplateColumns>> GetAllTemplateColsAsync()
         {
             // Implement logic to retrieve all template collections from your database
             return await _dbContext.TemplateColumns.ToListAsync();
         }
 
-        public async Task<TemplateColumns> CreateTemplateColAsync(TemplateColumns templateCollection)
+        public async Task<TemplateColumns> GetTemplateColAsync(int id)
         {
-            templateCollection.CreatedAt = DateTime.Now;
-            templateCollection.CreatedBy = "YourUsername";
-            // Implement logic to create a new template collection in your database
-            _dbContext.TemplateColumns.Add(templateCollection);
-            await _dbContext.SaveChangesAsync();
-            return templateCollection;
+            // Implement logic to retrieve a template collection by ID from your database
+            return await _dbContext.TemplateColumns.FindAsync(id);
         }
+
+        public async Task<bool> CreateTemplateColumnsAsync(int templateId, int[] columnIds)
+        {
+            // Create Template Columns logic here
+
+            // Example: Create Template Columns in the database using the passed templateId and columnIds
+            foreach (var columnId in columnIds)
+            {
+                var templateColumn = new TemplateColumns
+                {
+                    TemplateID = templateId,
+                    ColumnsID = columnId
+                };
+                templateColumn.CreatedAt = DateTime.Now;
+                templateColumn.CreatedBy = "YourUsername";
+                templateColumn.Active = true;
+                _dbContext.TemplateColumns.Add(templateColumn); // Assuming _dbContext is your DbContext instance
+            }
+
+            await _dbContext.SaveChangesAsync(); // Save changes to the database
+
+            return true; // return true if the template columns are successfully created
+        }
+
 
         public async Task<TemplateColumns> UpdateTemplateColAsync(int id, TemplateColumns templateCollection)
         {
@@ -57,14 +71,35 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<bool> DeleteTemplateColAsync(int id)
         {
-            // Implement logic to delete a template collection from your database
-            var templateCollection = await _dbContext.TemplateColumns.FindAsync(id);
-            if (templateCollection == null)
-                return false; // Template collection not found
+            try
+            {
+                var templateColumns = _dbContext.TemplateColumns.Where(tc => tc.TemplateID == id);
+                _dbContext.TemplateColumns.RemoveRange(templateColumns);
 
-            _dbContext.TemplateColumns.Remove(templateCollection);
+                var template = await _dbContext.Template.FindAsync(id);
+                if (template == null)
+                    return false; // Template not found
+
+                _dbContext.Template.Remove(template);
+                await _dbContext.SaveChangesAsync();
+                return true; // Deletion was successful
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception or log the error message
+                Console.WriteLine("Error occurred during deletion: " + ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<TemplateColumns> CreateTemplateColAsync(TemplateColumns templateCollection)
+        {
+            templateCollection.CreatedAt = DateTime.Now;
+            templateCollection.CreatedBy = "YourUsername";
+            // Implement logic to create a new template collection in your database
+            _dbContext.TemplateColumns.Add(templateCollection);
             await _dbContext.SaveChangesAsync();
-            return true; // Deletion was successful
+            return templateCollection;
         }
     }
 }
