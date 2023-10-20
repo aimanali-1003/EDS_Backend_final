@@ -47,8 +47,13 @@ namespace EDS_Backend_final.Services
         {
             return await _templateDAL.GetOrgByIdAsync(categoryID);
         }
+        public async Task<int> GetLastCreatedTemplateIdAsync()
+        {
+            var lastTemplateId = await _templateDAL.GetLastCreatedTemplateIdFromDBAsync();
+            return lastTemplateId;
+        }
 
-      
+
 
     }
 }

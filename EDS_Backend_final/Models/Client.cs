@@ -16,6 +16,7 @@ namespace EDS_Backend_final.Models
 
         // Foreign Key
         // Navigation property
+       public int OrgsOrganizationID { get; set; }
         public Org Orgs { get; set; }
     }
 }

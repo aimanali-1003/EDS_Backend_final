@@ -10,6 +10,6 @@ namespace EDS_Backend_final.Models
         [Required]
         public string RecipientType { get; set; }
 
-        public DataRecipient DataRecipient { get; set; }
+        public List<DataRecipient> DataRecipient { get; set; }
     }
 }

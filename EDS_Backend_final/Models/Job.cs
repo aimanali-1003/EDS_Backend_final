@@ -28,7 +28,7 @@ namespace EDS_Backend_final.Models
 
         public DateTime? EndDate { get; set; }
 
-        public string FileFormat { get; set; }
+        public int FileFormatID { get; set; }
 
         public int DataRecipientFailAlarm  { get; set; }
 
@@ -48,5 +48,7 @@ namespace EDS_Backend_final.Models
         public List<JobLog> JobLogID { get; set; }
 
         public List<JobStatus> JobStatuses { get; set; }
+
+        public FileFormat FileFormat { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EDS_Backend_final.DataContext;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,35 @@ namespace EDS_Backend_final.DataAccess
         {
             // Implement logic to retrieve all organizations from your database
             return await _dbContext.Org.ToListAsync();
+        }
+
+        public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
+        {
+            try
+            {
+                var clientViewModels = await _dbContext.Clients
+                    .Where(c => c.OrgsOrganizationID == organizationId)
+                    .Join(
+                        _dbContext.Org,
+                        client => client.Orgs.OrganizationID,
+                        org => org.OrganizationID,
+                        (client, org) => new ClientViewModel
+                        {
+                            ClientName = client.ClientName,
+                            ClientCode = client.ClientCode,
+ 
+                        }
+                    )
+                    .ToListAsync();
+
+                return clientViewModels;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
+                throw;
+            }
+        
         }
     }
 }

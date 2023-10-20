@@ -1,6 +1,7 @@
 ﻿using EDS_Backend_final.DataAccess;
 using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
+using EDS_Backend_final.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,11 @@ namespace EDS_Backend_final.Services
         public async Task<IEnumerable<Org>> GetAllOrganizationsAsync()
         {
             return await _organizationDAL.GetAllOrganizationsAsync();
+        }
+
+        public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
+        {
+            return await _organizationDAL.GetClientsForOrganizationAsync(organizationId);
         }
 
     }

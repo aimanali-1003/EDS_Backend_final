@@ -96,6 +96,13 @@ namespace EDS_Backend_final.Controllers
             return NoContent();
         }
 
+        [HttpGet("lastCreatedId")]
+        public async Task<IActionResult> GetLastCreatedTemplateId()
+        {
+            var lastTemplateId = await _templateService.GetLastCreatedTemplateIdAsync();
+            return Ok(lastTemplateId);
+        }
+
 
     }
 }

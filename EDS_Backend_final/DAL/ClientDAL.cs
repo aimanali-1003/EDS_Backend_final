@@ -66,9 +66,6 @@ namespace EDS_Backend_final.DataAccess
             if (existingClient == null)
                 return null; // Client not found
 
-            //var isClientCodeUnique = await IsCategoryCodeUniqueAsync(client.ClientCode, id);
-            //var isClientNameUnique = await IsCategoryNameUniqueAsync(client.ClientName, id);
-
             if (existingClient == null)
             {
                 // Category not found, throw a custom exception

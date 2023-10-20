@@ -4,6 +4,7 @@ namespace EDS_Backend_final.ViewModels
 {
     public class ClientViewModel
     {
+        public int? ClientID { get; set; }
 
         [Required]
         [MaxLength(255)]

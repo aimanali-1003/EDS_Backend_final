@@ -11,6 +11,7 @@ namespace EDS_Backend_final.Models
         [MaxLength(255)]
         public string TemplateName { get ; set; }
 
+        public int CategoryID { get; set; }
         // Navigation property for the associated Category
         public Category Category { get; set; }
 

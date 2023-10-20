@@ -13,6 +13,7 @@ namespace EDS_Backend_final.Models
         // Navigation property for the associated client
         public Client Client { get; set; }
 
-        public List<DataRecipientType> RecipientTypeID { get; set; }
+        public int RecipientTypeID { get; set; }
+        public DataRecipientType DataRecipientType { get; set; }
     }
 }

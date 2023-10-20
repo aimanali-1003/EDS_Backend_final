@@ -27,8 +27,9 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<IEnumerable<Template>> GetAllTemplatesAsync()
         {
+            var resp= await _dbContext.Template.ToListAsync();
             // Implement logic to retrieve all Template from your database
-            return await _dbContext.Template.ToListAsync();
+            return resp;
         }
 
         public async Task<Template> CreateTemplateAsync(Template template)
@@ -81,6 +82,11 @@ namespace EDS_Backend_final.DataAccess
                 // You can also return null or a default value if organization not found
                 throw;
             }
+        }
+        public async Task<int> GetLastCreatedTemplateIdFromDBAsync()
+        {
+            var lastTemplateId = await _dbContext.Template.OrderByDescending(t => t.TemplateID).Select(t => t.TemplateID).FirstOrDefaultAsync();
+            return lastTemplateId;
         }
 
     }

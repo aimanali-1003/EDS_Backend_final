@@ -13,7 +13,7 @@ namespace EDS_Backend_final.Interfaces
         Task<Template> CreateTemplateAsync(Template template);
         Task<Template> UpdateTemplateAsync(int id, Template template);
         Task<bool> DeleteTemplateAsync(int id);
-
+        Task<int> GetLastCreatedTemplateIdAsync();
         Task<Category> GetOrgByIdAsync(int categoryID);
 
     }

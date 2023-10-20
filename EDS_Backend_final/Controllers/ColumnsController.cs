@@ -81,5 +81,14 @@ namespace EDS_Backend_final.Controllers
 
             return NoContent();
         }
+        [HttpGet("byCategory/{categoryId}")]
+        public async Task<IActionResult> GetColumnsByCategory(int categoryId)
+        {
+            var columns = await _columnService.GetColumnsByCategoryAsync(categoryId);
+            if (columns == null || columns.Count == 0)
+                return NotFound();
+
+            return Ok(columns);
+        }
     }
 }
