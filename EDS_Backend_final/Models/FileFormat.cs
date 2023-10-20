@@ -5,7 +5,7 @@ namespace EDS_Backend_final.Models
     public class FileFormat
     {
         [Key]
-        public int FileFormarID { get; set; }
+        public int FileFormatID { get; set; }
 
         [Required]
         public string FileFormatName { get; set; }

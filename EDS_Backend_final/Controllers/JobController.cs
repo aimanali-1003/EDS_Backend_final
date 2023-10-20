@@ -80,5 +80,12 @@ namespace EDS_Backend_final.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("fileformat")]
+        public async Task<IActionResult> GetFileFormat()
+        {
+            var fileformat = await _jobService.GetAllFileFormatsAsync();
+            return Ok(fileformat);
+        }
     }
 }

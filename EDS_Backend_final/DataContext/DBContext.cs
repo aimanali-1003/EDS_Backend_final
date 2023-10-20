@@ -32,6 +32,8 @@ namespace EDS_Backend_final.DataContext
         public DbSet<TemplateColumns> TemplateColumns { get; set; }
         public DbSet<Template> Template { get; set; }
 
+        public DbSet<FileFormat> FileFormat { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

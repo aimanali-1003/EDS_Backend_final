@@ -40,5 +40,10 @@ namespace EDS_Backend_final.Services
         {
             return await _jobDAL.DeleteJobAsync(id);
         }
+
+        public async Task<IEnumerable<FileFormat>> GetAllFileFormatsAsync()
+        {
+            return await _jobDAL.GetAllFileFormatsAsync();
+        }
     }
 }

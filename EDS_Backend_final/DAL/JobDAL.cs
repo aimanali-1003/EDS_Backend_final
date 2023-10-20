@@ -66,5 +66,10 @@ namespace EDS_Backend_final.DataAccess
             await _dbContext.SaveChangesAsync();
             return true; // Deletion was successful
         }
+
+        public async Task<IEnumerable<FileFormat>> GetAllFileFormatsAsync()
+        {
+            return await _dbContext.FileFormat.ToListAsync();
+        }
     }
 }
