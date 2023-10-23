@@ -11,9 +11,11 @@ namespace EDS_Backend_final.Models
         public Lookup? Lookup { get; set; }
 
         // Navigation property for the associated client
-        public Client Client { get; set; }
+        public int? ClientID { get; set; }
+        public Client? Client { get; set; }
 
-        public int RecipientTypeID { get; set; }
-        public DataRecipientType DataRecipientType { get; set; }
+        public int? RecipientTypeID { get; set; }
+
+        public DataRecipientType? DataRecipientType { get; set; }
     }
 }

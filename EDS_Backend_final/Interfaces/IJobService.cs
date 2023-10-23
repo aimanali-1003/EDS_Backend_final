@@ -12,5 +12,7 @@ namespace EDS_Backend_final.Interfaces
         Task<Job> UpdateJobAsync(int id, Job job);
         Task<bool> DeleteJobAsync(int id);
         Task<IEnumerable<FileFormat>> GetAllFileFormatsAsync();
+
+        Task<int?> GetFileFormatIdAsync(string type);
     }
 }

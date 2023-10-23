@@ -40,5 +40,10 @@ namespace EDS_Backend_final.Services
         {
             return await _frequencyDAL.DeleteFrequencyAsync(id);
         }
+
+        public async Task<int?> GetFrequencyIdAsync(string frequencyType)
+        {
+            return await _frequencyDAL.GetFrequencyIdAsync(frequencyType);
+        }
     }
 }

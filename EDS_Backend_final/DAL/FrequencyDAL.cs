@@ -65,5 +65,13 @@ namespace EDS_Backend_final.DataAccess
             await _dbContext.SaveChangesAsync();
             return true; // Deletion was successful
         }
+
+        public async Task<int?> GetFrequencyIdAsync(string frequencyType)
+        {
+            var frequency = await _dbContext.Frequency
+                .FirstOrDefaultAsync(f => f.FrequencyType == frequencyType);
+
+            return frequency?.FrequencyID;
+        }
     }
 }

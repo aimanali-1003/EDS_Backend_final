@@ -11,5 +11,7 @@ namespace EDS_Backend_final.Interfaces
         Task<Frequency> CreateFrequencyAsync(Frequency frequency);
         Task<Frequency> UpdateFrequencyAsync(int id, Frequency frequency);
         Task<bool> DeleteFrequencyAsync(int id);
+
+        Task<int?> GetFrequencyIdAsync(string frequencyType);
     }
 }

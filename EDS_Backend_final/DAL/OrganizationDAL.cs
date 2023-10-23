@@ -42,6 +42,7 @@ namespace EDS_Backend_final.DataAccess
                         org => org.OrganizationID,
                         (client, org) => new ClientViewModel
                         {
+                            ClientID = client.ClientID,
                             ClientName = client.ClientName,
                             ClientCode = client.ClientCode,
  
