@@ -45,5 +45,10 @@ namespace EDS_Backend_final.Services
         {
             return await _jobDAL.GetAllFileFormatsAsync();
         }
+
+        public async Task<int?> GetFileFormatIdAsync(string type)
+        {
+            return await _jobDAL.GetFileFormatIdAsync(type);
+        }
     }
 }

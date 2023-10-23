@@ -71,5 +71,13 @@ namespace EDS_Backend_final.DataAccess
         {
             return await _dbContext.FileFormat.ToListAsync();
         }
+
+        public async Task<int?> GetFileFormatIdAsync(string type)
+        {
+            var fileformatid = await _dbContext.FileFormat
+               .FirstOrDefaultAsync(f => f.FileFormatName == type);
+
+            return fileformatid?.FileFormatID;
+        }
     }
 }

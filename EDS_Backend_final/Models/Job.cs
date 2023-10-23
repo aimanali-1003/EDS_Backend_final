@@ -33,7 +33,6 @@ namespace EDS_Backend_final.Models
         public int DataRecipientFailAlarm  { get; set; }
 
         public int NotificationRecipientFailAlarm { get; set; }
-
         public Client Client { get; set; }
 
         public Criteria Criteria { get; set; }
@@ -41,6 +40,7 @@ namespace EDS_Backend_final.Models
         public int TemplateID { get; set; }
         public Template Template { get; set; }
 
+        public int FrequencyID { get; set; }
         public Frequency Frequency { get; set; }
 
         public Lookup? Lookup { get; set; }
