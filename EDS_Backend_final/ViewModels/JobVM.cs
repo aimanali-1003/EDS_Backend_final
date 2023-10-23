@@ -21,6 +21,14 @@ namespace EDS_Backend_final.ViewModels
         public int? OrgsOrganizationID { get; set; }
         public int TemplateID { get; set; }
 
+        public int ClientID { get; set; }
+
         public bool? Active { get; set; }
+
+        public int FrequencyID { get; set; }
+
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+
     }
 }
