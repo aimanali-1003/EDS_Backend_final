@@ -16,7 +16,7 @@ namespace EDS_Backend_final.ViewModels
         // Navigation property for the associated Category
         public int CategoryID { get; set; }
 
-        public List<int> ColumnsId { get; set; }
+        public List<int> ColumnsId { get; set; } 
 
     }
 }

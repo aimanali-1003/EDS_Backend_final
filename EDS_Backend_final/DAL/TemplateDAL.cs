@@ -27,15 +27,16 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<IEnumerable<Template>> GetAllTemplatesAsync()
         {
-            var resp= await _dbContext.Template.ToListAsync();
+            var resp = await _dbContext.Template.OrderByDescending(t => t.CreatedAt).ToListAsync();
             // Implement logic to retrieve all Template from your database
             return resp;
         }
 
+
         public async Task<Template> CreateTemplateAsync(Template template)
         {
             template.CreatedAt = DateTime.Now;
-            template.CreatedBy = "Zamaan";
+            template.CreatedBy = "Zamaan"; 
             template.Active = true;
             _dbContext.Template.Add(template);
             await _dbContext.SaveChangesAsync();
@@ -52,6 +53,9 @@ namespace EDS_Backend_final.DataAccess
             // Update the properties of the existing template with the new data
             existingTemplate.UpdatedAt = DateTime.Now; // Set the updated timestamp
             existingTemplate.UpdatedBy = template.UpdatedBy;
+            existingTemplate.Active=template.Active;
+            existingTemplate.TemplateName = template.TemplateName;
+            existingTemplate.CategoryID = template.CategoryID;
 
             await _dbContext.SaveChangesAsync();
             return existingTemplate;

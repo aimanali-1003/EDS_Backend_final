@@ -88,20 +88,35 @@ namespace EDS_Backend_final.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTemplate(int id, [FromBody] Template templateVM)
+        public async Task<IActionResult> UpdateTemplate(int id, [FromBody] UpdateTemplateVM templateVM)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            if(templateVM.ColumnsId!=null)
+            {
+                // Check if any data exists against the template ID
+                var existingData = await _dbContext.TemplateColumns.AnyAsync(tc => tc.TemplateID == id);
+                if (existingData)
+                {
+                    var templateColumns = _dbContext.TemplateColumns.Where(tc => tc.TemplateID == id);
+                    _dbContext.TemplateColumns.RemoveRange(templateColumns);
+                    await _dbContext.SaveChangesAsync(); // Save the changes to the database
+                }
+
+                var templateColumnsCreated = await _templateColumnsDAL.CreateTemplateColumnsAsync(id, templateVM.ColumnsId.ToArray());
+            }
+            
+
             var template = _mapper.Map<Template>(templateVM);
             var updatedTemplate = await _templateService.UpdateTemplateAsync(id, template);
             if (updatedTemplate == null)
             {
                 return NotFound();
             }
-            var updatedTemplateVM = _mapper.Map<Template>(updatedTemplate);
 
+            var updatedTemplateVM = _mapper.Map<Template>(templateVM);
             return Ok(updatedTemplateVM);
         }
 
@@ -122,14 +137,22 @@ namespace EDS_Backend_final.Controllers
             return Ok(lastTemplateId);
         }
 
-        [HttpGet("api/Templates/GetColumnsOfTemplate")]
+        [HttpGet("GetColumnsOfTemplate")]
         public async Task<IActionResult> GetColumnsOfTemplate(int templateId)
         {
             try
             {
-                var columns = await _dbContext.TemplateColumns
+                var columnIds = await _dbContext.TemplateColumns
                     .Where(tc => tc.TemplateID == templateId)
                     .Select(tc => tc.ColumnsID)
+                    .ToListAsync();
+
+                if (columnIds == null || columnIds.Count == 0)
+                    return NotFound();
+
+                var columns = await _dbContext.Columns
+                    .Where(c => columnIds.Contains(c.ColumnsID))
+                    .Select(c => c.ColumnName)
                     .ToListAsync();
 
                 if (columns == null || columns.Count == 0)
@@ -142,6 +165,7 @@ namespace EDS_Backend_final.Controllers
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }
+
 
 
     }

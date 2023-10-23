@@ -29,6 +29,9 @@ public class AutoMapperProfile : Profile
         CreateMap<TemplateViewModel, Template>()
           .ForMember(dest => dest.TemplateID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
           .ReverseMap();
+        CreateMap<UpdateTemplateVM, Template>()
+         .ForMember(dest => dest.TemplateID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
+         .ReverseMap();
 
         CreateMap<UpdateClientVM, Client>()
          .ForMember(dest => dest.ClientID, opt => opt.Ignore()) // Assuming you want to ignore ColumnID
