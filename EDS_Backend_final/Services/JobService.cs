@@ -50,5 +50,11 @@ namespace EDS_Backend_final.Services
         {
             return await _jobDAL.GetFileFormatIdAsync(type);
         }
+
+        public async Task<Job> GetJobWithRelatedEntitiesAsync(int jobId)
+        {
+            return await _jobDAL.GetJobWithRelatedEntitiesAsync(jobId);
+        }
+
     }
 }

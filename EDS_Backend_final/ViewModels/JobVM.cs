@@ -10,7 +10,7 @@ namespace EDS_Backend_final.ViewModels
 
         public string JobType { get; set; }
 
-        public int RecipientTypeID { get; set; }
+        public int? RecipientTypeID { get; set; }
 
         public DateTime? StartDate { get; set; }
 

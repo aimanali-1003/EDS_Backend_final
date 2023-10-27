@@ -14,5 +14,7 @@ namespace EDS_Backend_final.Interfaces
         Task<IEnumerable<FileFormat>> GetAllFileFormatsAsync();
 
         Task<int?> GetFileFormatIdAsync(string type);
+
+        Task<Job> GetJobWithRelatedEntitiesAsync(int jobId);
     }
 }

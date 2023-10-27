@@ -47,11 +47,6 @@ namespace EDS_Backend_final.DataContext
                     junctionEntity.ToTable("FrequencyDayOfWeek"); // Name of the junction table
                 });
 
-            modelBuilder.Entity<Job>()
-        .HasOne(j => j.Template)
-        .WithMany(t => t.Jobs)
-        .HasForeignKey(j => j.TemplateID)
-        .OnDelete(DeleteBehavior.Restrict);
 
         }
 

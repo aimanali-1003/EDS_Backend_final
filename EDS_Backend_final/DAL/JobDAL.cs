@@ -33,7 +33,8 @@ namespace EDS_Backend_final.DataAccess
         {
             job.CreatedAt = DateTime.Now;
             job.CreatedBy = "YourUserName"; // Replace with the actual user name
-            // Implement logic to create a new job in your database
+            job.Active = true;
+
             _dbContext.Job.Add(job);
             await _dbContext.SaveChangesAsync();
             return job;
@@ -41,12 +42,10 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<Job> UpdateJobAsync(int id, Job job)
         {
-            // Implement logic to update a job in your database
             var existingJob = await _dbContext.Job.FindAsync(id);
             if (existingJob == null)
                 return null; // Job not found
 
-            // Update the properties of the existing job with the new data
 
             existingJob.UpdatedAt = DateTime.Now; // Set the updated timestamp
             existingJob.UpdatedBy = job.UpdatedBy;
@@ -78,6 +77,41 @@ namespace EDS_Backend_final.DataAccess
                .FirstOrDefaultAsync(f => f.FileFormatName == type);
 
             return fileformatid?.FileFormatID;
+        }
+
+        public async Task<Job> GetJobWithRelatedEntitiesAsync(int jobId)
+        {
+
+            //return await _dbContext.Job
+            //    .Include(job => job.Frequency)
+            //    .Include(job => job.Template)
+            //    .Include(job => job.FileFormat)
+            //    .Include(job => job.DataRecipient)
+            //    .ThenInclude(dr => dr.DataRecipientType)
+            //    .FirstOrDefaultAsync(job => job.JobID == jobId);
+            var job = await _dbContext.Job
+        .Include(job => job.Frequency)
+        .Include(job => job.Template)
+        .Include(job => job.FileFormat)
+        .Include(job => job.DataRecipient)
+        .FirstOrDefaultAsync(job => job.JobID == jobId);
+
+            // Include RecipientTypeName from DataRecipientType
+            if (job != null)
+            {
+                var recipientType = _dbContext.DataRecipientType
+                    .FirstOrDefault(dr => dr.RecipientTypeID == job.DataRecipient.RecipientTypeID);
+
+                if (recipientType != null)
+                {
+                    job.DataRecipient.DataRecipientType = recipientType;
+                }
+            }
+
+            return job;
+
+
+
         }
     }
 }
