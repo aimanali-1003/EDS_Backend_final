@@ -34,6 +34,7 @@ namespace EDS_Backend_final.DataAccess
             dataRecipient.CreatedAt = DateTime.Now;
             dataRecipient.CreatedBy = "YourName"; // Update with the appropriate user
             dataRecipient.Active = true;
+            dataRecipient.DataRecipientType = dataRecipient.DataRecipientType;
 
             // Implement logic to create a new data recipient in your database
             _dbContext.DataRecipient.Add(dataRecipient);

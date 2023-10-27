@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace EDS_Backend_final.Controllers
@@ -21,6 +24,7 @@ namespace EDS_Backend_final.Controllers
         private IFrequencyService _frequencyService;
         private IDataRecipientService _recipientService;
         private readonly DBContext _dbContext;
+        private readonly JsonSerializerOptions jsonSerializerOptions;
 
         public JobController(IJobService jobService, IMapper mapper, IFrequencyService frequencyService, IDataRecipientService recipientService, DBContext dbContext)
         {
@@ -29,6 +33,11 @@ namespace EDS_Backend_final.Controllers
             _frequencyService = frequencyService;
             _recipientService = recipientService;
             _dbContext = dbContext;
+            jsonSerializerOptions = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                // Other serialization options, if needed
+            };
         }
 
         [HttpGet]
@@ -41,12 +50,18 @@ namespace EDS_Backend_final.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetJob(int id)
         {
-            var job = await _jobService.GetJobAsync(id);
-            if (job == null)
-                return NotFound();
 
-            return Ok(job);
-        }
+            Job job = await _jobService.GetJobWithRelatedEntitiesAsync(id);
+
+            if (job != null)
+            {
+                // Serialize the Job entity with circular references handled
+                string serializedJob = JsonSerializer.Serialize(job, jsonSerializerOptions);
+                return Content(serializedJob, "application/json");
+            }
+
+            return NotFound(); // Job not found
+            }
 
         [HttpPost]
         public async Task<IActionResult> CreateJob([FromBody] JobViewModel job)
@@ -59,17 +74,12 @@ namespace EDS_Backend_final.Controllers
             var client = await _dbContext.Clients.FindAsync(job.ClientID);
             var dataRecipientType = await _dbContext.DataRecipientType.FindAsync(job.RecipientTypeID);
 
-            //var dataRecipient = new DataRecipient
-            //    {
-            //        Client = client,
-            //    DataRecipientType = dataRecipientType,
-            //        // Other properties as needed
-            //    };
-
             var dataRecipient = new DataRecipient
             {
                 ClientID = job.ClientID,
-                RecipientTypeID = job.RecipientTypeID
+                RecipientTypeID = job.RecipientTypeID,
+                Client = client,
+                
             };
 
             var createDataRecipient = await _recipientService.CreateDataRecipientAsync(_mapper.Map<DataRecipient>(dataRecipient));
@@ -77,20 +87,27 @@ namespace EDS_Backend_final.Controllers
 
             int? frequencyid = await _frequencyService.GetFrequencyIdAsync(job.FrequencyType);
 
+            int DataRecipientID = createDataRecipient.RecipientID;
             int? fileformatid = await _jobService.GetFileFormatIdAsync(job.FileFormatType);
             var jobEntity = new Job
             {
-                // Map other properties from the JobViewModel as needed
-                FrequencyID = (int)frequencyid,
-                JobType = job.JobType,
-                Active = (bool)job.Active,
                 FileFormatID = (int)fileformatid,
+                DataRecipientID = DataRecipientID,
+                FrequencyID = (int)frequencyid,
+                TemplateID = job.TemplateID,
+                JobID = job.JobID,
+                JobType = job.JobType,
+                StartDate = job.StartTime,
+                EndDate = job.EndTime,
 
+            };
+            Console.WriteLine(jobEntity);
 
-    };
+            var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(jobEntity));
+            string serializedJob = JsonSerializer.Serialize(createdJob, jsonSerializerOptions);
+            return Content(serializedJob, "application/json");
+            //return CreatedAtAction(nameof(GetJob), new { id = createdJob.JobID }, createdJob);
 
-            var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(job));
-            return CreatedAtAction(nameof(GetJob), new { id = createdJob.JobID }, _mapper.Map<JobViewModel>(createdJob));
         }
 
 

@@ -6,21 +6,10 @@ namespace EDS_Backend_final.Models
     public class Job : AuditableEntity
     {
         [Key]
+
+
+                     
         public int JobID { get; set; }
-
-        public bool? NotificationCheck { get; set; }
-
-        [Range(0, int.MaxValue)]
-        public int? MinRecordRecordCountAlarm { get; set; }
-
-        [Range(0, int.MaxValue)]
-        public int? MaxRecordRecordCountAlarm { get; set; }
-
-        [Range(0, int.MaxValue)]
-        public int? MinRunDurationAlarm { get; set; }
-
-        [Range(0, int.MaxValue)]
-        public int? MaxRunDurationAlarm { get; set; }
 
         public string JobType { get; set; }
 
@@ -28,27 +17,41 @@ namespace EDS_Backend_final.Models
 
         public DateTime? EndDate { get; set; }
 
+        public bool? NotificationCheck { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? MinRecordCountAlarm { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? MaxRecordCountAlarm { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? MinRunDurationAlarm { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int? MaxRunDurationAlarm { get; set; }
+
         public int FileFormatID { get; set; }
 
-        public int DataRecipientFailAlarm  { get; set; }
-
-        public int NotificationRecipientFailAlarm { get; set; }
-        public Client Client { get; set; }
-
-        public Criteria Criteria { get; set; }
 
         public int TemplateID { get; set; }
-        public Template Template { get; set; }
 
         public int FrequencyID { get; set; }
-        public Frequency Frequency { get; set; }
 
-        public Lookup? Lookup { get; set; }
+        public int DataRecipientID { get; set; }
 
-        public List<JobLog> JobLogID { get; set; }
+        public int CriteriaID { get; set; }
 
-        public List<JobStatus> JobStatuses { get; set; }
+        public int LookupID { get; set; }
 
-        public FileFormat FileFormat { get; set; }
+        public Frequency? Frequency { get; set; }
+
+        public Template? Template { get; set; }
+
+        public FileFormat? FileFormat { get; set; }
+
+        public DataRecipient? DataRecipient { get; set; }
+
+
     }
 }

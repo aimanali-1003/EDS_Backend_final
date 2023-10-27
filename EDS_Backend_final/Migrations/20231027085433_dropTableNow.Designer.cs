@@ -4,6 +4,7 @@ using EDS_Backend_final.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDS_Backend_final.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231027085433_dropTableNow")]
+    partial class dropTableNow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -386,10 +389,10 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CriteriaID")
+                    b.Property<int?>("CriteriaID")
                         .HasColumnType("int");
 
-                    b.Property<int>("DataRecipientID")
+                    b.Property<int>("DataRecipientFailAlarm")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("EndDate")
@@ -398,23 +401,23 @@ namespace EDS_Backend_final.Migrations
                     b.Property<int>("FileFormatID")
                         .HasColumnType("int");
 
-                    b.Property<int>("FrequencyID")
+                    b.Property<int?>("FrequencyID")
                         .HasColumnType("int");
 
                     b.Property<string>("JobType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LookupID")
+                    b.Property<int?>("LookupID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MaxRecordCountAlarm")
+                    b.Property<int?>("MaxRecordRecordCountAlarm")
                         .HasColumnType("int");
 
                     b.Property<int?>("MaxRunDurationAlarm")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MinRecordCountAlarm")
+                    b.Property<int?>("MinRecordRecordCountAlarm")
                         .HasColumnType("int");
 
                     b.Property<int?>("MinRunDurationAlarm")
@@ -423,10 +426,13 @@ namespace EDS_Backend_final.Migrations
                     b.Property<bool?>("NotificationCheck")
                         .HasColumnType("bit");
 
+                    b.Property<int>("NotificationRecipientFailAlarm")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TemplateID")
+                    b.Property<int?>("TemplateID")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -930,27 +936,19 @@ namespace EDS_Backend_final.Migrations
                 {
                     b.HasOne("EDS_Backend_final.Models.Criteria", null)
                         .WithMany("Jobs")
-                        .HasForeignKey("CriteriaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CriteriaID");
 
                     b.HasOne("EDS_Backend_final.Models.Frequency", null)
                         .WithMany("Jobs")
-                        .HasForeignKey("FrequencyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FrequencyID");
 
                     b.HasOne("EDS_Backend_final.Models.Lookup", null)
                         .WithMany("Jobs")
-                        .HasForeignKey("LookupID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LookupID");
 
                     b.HasOne("EDS_Backend_final.Models.Template", null)
                         .WithMany("Jobs")
-                        .HasForeignKey("TemplateID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TemplateID");
                 });
 
             modelBuilder.Entity("EDS_Backend_final.Models.JobLog", b =>

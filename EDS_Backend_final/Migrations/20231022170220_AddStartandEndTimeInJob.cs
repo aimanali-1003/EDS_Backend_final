@@ -41,11 +41,11 @@ namespace EDS_Backend_final.Migrations
         {
             migrationBuilder.DropColumn(
                name: "startTime",
-               table: "Jobs");
+               table: "Job");
 
             migrationBuilder.DropColumn(
                 name: "endTime",
-                table: "Jobs");
+                table: "Job");
         }
     }
 }
