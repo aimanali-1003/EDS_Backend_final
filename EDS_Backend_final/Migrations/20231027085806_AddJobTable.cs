@@ -33,13 +33,6 @@ namespace EDS_Backend_final.Migrations
                              table.PrimaryKey("PK_Job", x => x.JobID);
 
                              table.ForeignKey(
-                                    name: "FK_Job_FileFormat_FileFormatID",
-                                    column: x => x.FileFormatID,
-                                    principalTable: "FileFormat",
-                                    principalColumn: "FileFormatID",
-                                    onDelete: ReferentialAction.Cascade);
-
-                             table.ForeignKey(
                                  name: "FK_Job_Frequency_FrequencyID",
                                  column: x => x.FrequencyID,
                                  principalTable: "Frequency",

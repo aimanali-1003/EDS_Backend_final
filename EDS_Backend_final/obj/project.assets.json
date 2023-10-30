@@ -3379,19 +3379,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Dev\\.nuget\\packages\\": {}
+    "C:\\Users\\win10_pro\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dev\\Documents\\GitHub\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
+      "projectUniqueName": "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
       "projectName": "EDS_Backend_final",
-      "projectPath": "C:\\Users\\Dev\\Documents\\GitHub\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
-      "packagesPath": "C:\\Users\\Dev\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dev\\Documents\\GitHub\\EDS_Backend_final\\EDS_Backend_final\\obj\\",
+      "projectPath": "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
+      "packagesPath": "C:\\Users\\win10_pro\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Dev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\win10_pro\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

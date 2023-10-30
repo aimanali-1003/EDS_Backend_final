@@ -12,21 +12,21 @@ namespace EDS_Backend_final.Migrations
         {
             //migrationBuilder.DropTable(
             //                   name: "Job");
-    //        migrationBuilder.DropForeignKey(
-    //name: "FileFormatID",
-    //table: "FileFormat");
+            //        migrationBuilder.DropForeignKey(
+            //name: "FileFormatID",
+            //table: "FileFormat");
 
-            migrationBuilder.DropForeignKey(
-               name: "FK_Job_FileFormat_FileFormatID",
-               table: "Job");
+            //migrationBuilder.DropForeignKey(
+            //   name: "FK_Job_FileFormat_FileFormatID",
+            //   table: "Job");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Job_FileFormatID",
-                table: "Job");
+            //migrationBuilder.DropIndex(
+            //    name: "IX_Job_FileFormatID",
+            //    table: "Job");
 
-            migrationBuilder.DropColumn(
-                name: "FileFormatID",
-                table: "Job");
+            //migrationBuilder.DropColumn(
+            //    name: "FileFormatID",
+            //    table: "Job");
 
         }
 
