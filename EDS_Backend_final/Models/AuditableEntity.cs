@@ -9,6 +9,7 @@ namespace EDS_Backend_final.Models
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool Active { get; set; }
+        public bool IsDeleted { get; set; } // New field for soft deletion
     }
 
 }

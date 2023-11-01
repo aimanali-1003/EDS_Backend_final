@@ -82,12 +82,13 @@ namespace EDS_Backend_final.Controllers
                 
             };
 
-            var createDataRecipient = await _recipientService.CreateDataRecipientAsync(_mapper.Map<DataRecipient>(dataRecipient));
+            //var createDataRecipient = await _recipientService.CreateDataRecipientAsync(_mapper.Map<DataRecipient>(dataRecipient));
 
 
             int? frequencyid = await _frequencyService.GetFrequencyIdAsync(job.FrequencyType);
 
-            int DataRecipientID = createDataRecipient.RecipientID;
+            //int DataRecipientID = createDataRecipient.RecipientID;
+            int DataRecipientID = 1;
             int? fileformatid = await _jobService.GetFileFormatIdAsync(job.FileFormatType);
             var jobEntity = new Job
             {
@@ -95,11 +96,13 @@ namespace EDS_Backend_final.Controllers
                 DataRecipientID = DataRecipientID,
                 FrequencyID = (int)frequencyid,
                 //TemplateID = job.TemplateID,
-                TemplateID = 3,
+                TemplateID = 1,
                 JobID = job.JobID,
                 JobType = job.JobType,
                 StartDate = job.StartTime,
                 EndDate = job.EndTime,
+                Client = client,
+                ClientID = job.ClientID
 
             };
             Console.WriteLine(jobEntity);

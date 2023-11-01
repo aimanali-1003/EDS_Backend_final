@@ -10,14 +10,14 @@ namespace EDS_Backend_final.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddForeignKey(
-                name: "FK_Job_FileFormat_FileFormatID",
-                table: "Job",
-                column: "FileFormatID",
-                principalTable: "FileFormat",
-                principalColumn: "FileFormatID",
-                onDelete: ReferentialAction.Restrict
-            );
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_Job_FileFormat_FileFormatID",
+            //    table: "Job",
+            //    column: "FileFormatID",
+            //    principalTable: "FileFormat",
+            //    principalColumn: "FileFormatID",
+            //    onDelete: ReferentialAction.Restrict
+            //);
 
 
         }

@@ -27,9 +27,10 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
-            // Implement logic to retrieve all clients from your database
-            return await _dbContext.Clients.ToListAsync();
+            // Implement logic to retrieve all active clients from your database
+            return await _dbContext.Clients.Where(client => !client.IsDeleted).ToListAsync();
         }
+
 
         public async Task<Client> CreateClientAsync(Client client)
         {
@@ -98,11 +99,12 @@ namespace EDS_Backend_final.DataAccess
             var client = await _dbContext.Clients.FindAsync(id);
             if (client == null)
                 return false;
-
-            _dbContext.Clients.Remove(client);
+            client.Active = false;
+            client.IsDeleted = true; // Set IsDeleted to true instead of removing the client
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<Org> GetOrgByIdAsync(int organizationId)
         {
