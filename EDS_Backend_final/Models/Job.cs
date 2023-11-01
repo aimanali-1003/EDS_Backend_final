@@ -44,6 +44,12 @@ namespace EDS_Backend_final.Models
 
         public int LookupID { get; set; }
 
+        public int ClientID { get; set; }   
+
+        public string? StartTime { get; set; }
+
+        public Client? Client { get; set; }
+
         public Frequency? Frequency { get; set; }
 
         public Template? Template { get; set; }

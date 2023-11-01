@@ -1,5 +1,6 @@
 ﻿using EDS_Backend_final.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EDS_Backend_final.ViewModels
 {
@@ -29,8 +30,8 @@ namespace EDS_Backend_final.ViewModels
 
         public string FrequencyType { get; set; }
 
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public string StartTime { get; set; }
+        //public DateTime? EndTime { get; set; }
 
         public int? FrequencyID { get; set; }
 

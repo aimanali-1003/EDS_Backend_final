@@ -36,7 +36,6 @@ namespace EDS_Backend_final.Controllers
             jsonSerializerOptions = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve,
-                // Other serialization options, if needed
             };
         }
 
@@ -55,13 +54,12 @@ namespace EDS_Backend_final.Controllers
 
             if (job != null)
             {
-                // Serialize the Job entity with circular references handled
                 string serializedJob = JsonSerializer.Serialize(job, jsonSerializerOptions);
                 return Content(serializedJob, "application/json");
             }
 
             return NotFound(); // Job not found
-            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateJob([FromBody] JobViewModel job)
@@ -94,20 +92,18 @@ namespace EDS_Backend_final.Controllers
                 FileFormatID = (int)fileformatid,
                 DataRecipientID = DataRecipientID,
                 FrequencyID = (int)frequencyid,
-                //TemplateID = job.TemplateID,
-                TemplateID = 3,
+                TemplateID = job.TemplateID,
                 JobID = job.JobID,
                 JobType = job.JobType,
-                StartDate = job.StartTime,
-                EndDate = job.EndTime,
-
+                StartDate = job.StartDate,
+                ClientID = job.ClientID,
+                StartTime = job.StartTime,
             };
             Console.WriteLine(jobEntity);
 
             var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(jobEntity));
             string serializedJob = JsonSerializer.Serialize(createdJob, jsonSerializerOptions);
             return Content(serializedJob, "application/json");
-            //return CreatedAtAction(nameof(GetJob), new { id = createdJob.JobID }, createdJob);
 
         }
 

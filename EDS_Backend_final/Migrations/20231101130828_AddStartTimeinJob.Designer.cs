@@ -4,6 +4,7 @@ using EDS_Backend_final.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDS_Backend_final.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231101130828_AddStartTimeinJob")]
+    partial class AddStartTimeinJob
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -428,9 +431,6 @@ namespace EDS_Backend_final.Migrations
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("StartTime")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TemplateID")
                         .HasColumnType("int");
