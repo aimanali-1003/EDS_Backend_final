@@ -36,7 +36,6 @@ namespace EDS_Backend_final.Controllers
             jsonSerializerOptions = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve,
-                // Other serialization options, if needed
             };
         }
 
@@ -55,13 +54,12 @@ namespace EDS_Backend_final.Controllers
 
             if (job != null)
             {
-                // Serialize the Job entity with circular references handled
                 string serializedJob = JsonSerializer.Serialize(job, jsonSerializerOptions);
                 return Content(serializedJob, "application/json");
             }
 
             return NotFound(); // Job not found
-            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateJob([FromBody] JobViewModel job)
@@ -95,43 +93,69 @@ namespace EDS_Backend_final.Controllers
                 FileFormatID = (int)fileformatid,
                 DataRecipientID = DataRecipientID,
                 FrequencyID = (int)frequencyid,
-                //TemplateID = job.TemplateID,
-                TemplateID = 1,
+                TemplateID = job.TemplateID,
                 JobID = job.JobID,
                 JobType = job.JobType,
-                StartDate = job.StartTime,
-                EndDate = job.EndTime,
-                Client = client,
-                ClientID = job.ClientID
-
+                StartDate = job.StartDate,
+                ClientID = job.ClientID,
+                StartTime = job.StartTime,
+                DayofWeek_Lkp = job.DayofWeek_Lkp
             };
             Console.WriteLine(jobEntity);
 
             var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(jobEntity));
             string serializedJob = JsonSerializer.Serialize(createdJob, jsonSerializerOptions);
             return Content(serializedJob, "application/json");
-            //return CreatedAtAction(nameof(GetJob), new { id = createdJob.JobID }, createdJob);
 
         }
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateJob(int id, [FromBody] Job jobVM)
+        public async Task<IActionResult> UpdateJob(int id, [FromBody] JobViewModel job)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var job = _mapper.Map<Job>(jobVM);
-            var updatedJob = await _jobService.UpdateJobAsync(id, job);
-            if (updatedJob == null)
-            {
-                return NotFound();
-            }
-            var updatedJobVM = _mapper.Map<Job>(updatedJob);
 
-            return Ok(updatedJobVM);
+            var client = await _dbContext.Clients.FindAsync(job.ClientID);
+            var dataRecipientType = await _dbContext.DataRecipientType.FindAsync(job.RecipientTypeID);
+
+            var dataRecipient = new DataRecipient
+            {
+                ClientID = job.ClientID,
+                RecipientTypeID = job.RecipientTypeID,
+                Client = client,
+
+            };
+
+            var createDataRecipient = await _recipientService.CreateDataRecipientAsync(_mapper.Map<DataRecipient>(dataRecipient));
+
+            int? frequencyid = await _frequencyService.GetFrequencyIdAsync(job.FrequencyType);
+
+            int DataRecipientID = createDataRecipient.RecipientID;
+            int? fileformatid = await _jobService.GetFileFormatIdAsync(job.FileFormatType);
+            var jobEntity = new Job
+            {
+                FileFormatID = (int)fileformatid,
+                DataRecipientID = DataRecipientID,
+                FrequencyID = (int)frequencyid,
+                TemplateID = job.TemplateID,
+                JobID = job.JobID,
+                JobType = job.JobType,
+                StartDate = job.StartDate,
+                ClientID = job.ClientID,
+                StartTime = job.StartTime,
+                DayofWeek_Lkp = job.DayofWeek_Lkp
+            };
+
+            // Update the job entity using the provided data
+            var updatedJob = await _jobService.UpdateJobAsync(id, _mapper.Map<Job>(jobEntity));
+
+            // Optionally, you can return the updated job data in the response
+            return Ok(_mapper.Map<JobViewModel>(updatedJob));
         }
+
 
 
         [HttpDelete("{id}")]

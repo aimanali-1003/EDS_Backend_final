@@ -4,6 +4,7 @@ using EDS_Backend_final.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDS_Backend_final.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231101130828_AddStartTimeinJob")]
+    partial class AddStartTimeinJob
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,9 +67,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -104,9 +104,6 @@ namespace EDS_Backend_final.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("OrgsOrganizationID")
                         .HasColumnType("int");
@@ -155,9 +152,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -196,9 +190,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("LookupID")
                         .HasColumnType("int");
@@ -248,9 +239,6 @@ namespace EDS_Backend_final.Migrations
                     b.Property<int?>("DataRecipientTypeRecipientTypeID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("LookupID")
                         .HasColumnType("int");
 
@@ -291,9 +279,6 @@ namespace EDS_Backend_final.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("RecipientType")
                         .IsRequired()
@@ -372,9 +357,6 @@ namespace EDS_Backend_final.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("Time")
                         .HasColumnType("datetime2");
 
@@ -416,14 +398,14 @@ namespace EDS_Backend_final.Migrations
                     b.Property<int>("DataRecipientID")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("FileFormatID")
                         .HasColumnType("int");
 
                     b.Property<int>("FrequencyID")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("JobType")
                         .IsRequired()
@@ -449,9 +431,6 @@ namespace EDS_Backend_final.Migrations
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("StartTime")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TemplateID")
                         .HasColumnType("int");
@@ -505,9 +484,6 @@ namespace EDS_Backend_final.Migrations
                     b.Property<bool>("ExtraxtSuccessFailure")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("JobID")
                         .HasColumnType("int");
 
@@ -554,9 +530,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("JobID")
                         .HasColumnType("int");
 
@@ -600,9 +573,6 @@ namespace EDS_Backend_final.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LookupType")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -644,9 +614,6 @@ namespace EDS_Backend_final.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsSubscribed")
                         .HasColumnType("bit");
@@ -694,9 +661,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("OrganizationCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -743,9 +707,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("OrganizationID")
                         .HasColumnType("int");
 
@@ -791,9 +752,6 @@ namespace EDS_Backend_final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("TemplateName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -832,9 +790,6 @@ namespace EDS_Backend_final.Migrations
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("TemplateID")
                         .HasColumnType("int");

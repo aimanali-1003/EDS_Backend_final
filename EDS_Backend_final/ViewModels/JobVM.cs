@@ -1,5 +1,6 @@
 ﻿using EDS_Backend_final.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EDS_Backend_final.ViewModels
 {
@@ -14,10 +15,10 @@ namespace EDS_Backend_final.ViewModels
 
         public DateTime? StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
-
         //navigation property
         public string FileFormatType { get; set; }
+
+        public string? DayofWeek_Lkp { get; set; }
 
         //navigation property
         public int? OrgsOrganizationID { get; set; }
@@ -29,8 +30,8 @@ namespace EDS_Backend_final.ViewModels
 
         public string FrequencyType { get; set; }
 
-        public DateTime? StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public string StartTime { get; set; }
+        //public DateTime? EndTime { get; set; }
 
         public int? FrequencyID { get; set; }
 

@@ -95,6 +95,7 @@ namespace EDS_Backend_final.DataAccess
         .Include(job => job.Template)
         .Include(job => job.FileFormat)
         .Include(job => job.DataRecipient)
+        .Include(job => job.Client)
         .FirstOrDefaultAsync(job => job.JobID == jobId);
 
             // Include RecipientTypeName from DataRecipientType
@@ -110,9 +111,6 @@ namespace EDS_Backend_final.DataAccess
             }
 
             return job;
-
-
-
         }
     }
 }
