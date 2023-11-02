@@ -14,6 +14,7 @@ namespace EDS_Backend_final.Interfaces
         Task<Template> UpdateTemplateAsync(int id, Template template);
         Task<bool> DeleteTemplateAsync(int id);
         Task<int> GetLastCreatedTemplateIdAsync();
+        Task<bool> GetJob(int id);
         Task<Category> GetOrgByIdAsync(int categoryID);
 
     }

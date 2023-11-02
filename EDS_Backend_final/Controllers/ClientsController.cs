@@ -92,6 +92,12 @@ namespace EDS_Backend_final.Controllers
                 {
                     return NotFound("Organization not found");
                 }
+                //var clientExistsInJobTable = await _clientService.CheckIfClientExistsInJobTableAsync(id);
+
+                //if (clientExistsInJobTable)
+                //{
+                //    return BadRequest("Cannot deactivate the client as it exists in the job table.");
+                //}
 
                 var updatedClient = await _clientService.UpdateClientAsync(id, client);
 

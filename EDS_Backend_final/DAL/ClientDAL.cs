@@ -28,7 +28,7 @@ namespace EDS_Backend_final.DataAccess
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
             // Implement logic to retrieve all active clients from your database
-            return await _dbContext.Clients.Where(client => !client.IsDeleted).ToListAsync();
+            return await _dbContext.Clients.Where(client =>client.Active).ToListAsync();
         }
 
 
@@ -64,23 +64,26 @@ namespace EDS_Backend_final.DataAccess
         {
             // Implement logic to update a client in your database
             var existingClient = await _dbContext.Clients.FindAsync(id);
-            if (existingClient == null)
-                return null; // Client not found
 
             if (existingClient == null)
             {
-                // Category not found, throw a custom exception
-                throw new ValidationException("Category not found");
+                // Client not found, throw a custom exception
+                throw new ValidationException("Client not found");
             }
 
             if (!IsValidAlphanumeric(client.ClientCode) || !IsValidAlphanumeric(client.ClientName))
             {
-                throw new ValidationException("Category code or name contains invalid characters");
+                throw new ValidationException("Client code or name contains invalid characters");
             }
 
             if (client.ClientCode == existingClient.ClientCode && client.ClientName == existingClient.ClientName && client.Active == existingClient.Active)
             {
                 throw new ValidationException("No changes were made");
+            }
+
+            if (_dbContext.Job.Any(j => j.ClientID == id ))
+            {
+                throw new ValidationException("Client cannot be deactivated as it is present in the active job");
             }
 
             // Update the properties of the existing client with the new data
@@ -92,6 +95,7 @@ namespace EDS_Backend_final.DataAccess
 
             await _dbContext.SaveChangesAsync();
             return existingClient;
+
         }
 
         public async Task<bool> DeleteClientAsync(int id)
@@ -99,8 +103,7 @@ namespace EDS_Backend_final.DataAccess
             var client = await _dbContext.Clients.FindAsync(id);
             if (client == null)
                 return false;
-            client.Active = false;
-            client.IsDeleted = true; // Set IsDeleted to true instead of removing the client
+            client.Active = false; 
             await _dbContext.SaveChangesAsync();
             return true;
         }

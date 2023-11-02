@@ -137,6 +137,13 @@ namespace EDS_Backend_final.Controllers
             return Ok(lastTemplateId);
         }
 
+        //[HttpGet("getJob")]
+        //public async Task<IActionResult> GetJobAssociatedWithTemplate(int templateId)
+        //{
+        //    var getJob = await _templateService.GetJob(templateId);
+        //    return Ok(getJob);
+        //}
+
         [HttpGet("GetColumnsOfTemplate")]
         public async Task<IActionResult> GetColumnsOfTemplate(int templateId)
         {

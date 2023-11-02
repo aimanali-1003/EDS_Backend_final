@@ -40,7 +40,7 @@ namespace EDS_Backend_final.DataAccess
         public async Task<Template> CreateTemplateAsync(Template template)
         {
             template.CreatedAt = DateTime.Now;
-            template.CreatedBy = "Zamaan"; 
+            template.CreatedBy = "Zamaan";
             template.Active = true;
             _dbContext.Template.Add(template);
             await _dbContext.SaveChangesAsync();
@@ -57,7 +57,7 @@ namespace EDS_Backend_final.DataAccess
             // Update the properties of the existing template with the new data
             existingTemplate.UpdatedAt = DateTime.Now; // Set the updated timestamp
             existingTemplate.UpdatedBy = template.UpdatedBy;
-            existingTemplate.Active=template.Active;
+            existingTemplate.Active = template.Active;
             existingTemplate.TemplateName = template.TemplateName;
             existingTemplate.CategoryID = template.CategoryID;
 
@@ -72,7 +72,7 @@ namespace EDS_Backend_final.DataAccess
                 var templateColumns = await _dbContext.TemplateColumns.Where(tc => tc.TemplateID == id).ToListAsync();
                 foreach (var templateColumn in templateColumns)
                 {
-                    templateColumn.Active = false; 
+                    templateColumn.Active = false;
                     templateColumn.IsDeleted = true;
                 }
 
@@ -111,6 +111,13 @@ namespace EDS_Backend_final.DataAccess
             var lastTemplateId = await _dbContext.Template.OrderByDescending(t => t.TemplateID).Select(t => t.TemplateID).FirstOrDefaultAsync();
             return lastTemplateId;
         }
+
+        public async Task<bool> GetJobOfTemplate(int id)
+        {
+            var jobExists = await _dbContext.Job.AnyAsync(j => j.TemplateID == id);
+            return jobExists;
+        }
+
 
     }
 }
