@@ -47,7 +47,6 @@ namespace EDS_Backend_final.DataContext
                     junctionEntity.ToTable("FrequencyDayOfWeek"); // Name of the junction table
                 });
 
-
         }
 
 

@@ -15,7 +15,7 @@ namespace EDS_Backend_final.Models
 
         public DateTime? StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        //public DateTime? EndDate { get; set; }
 
         public bool? NotificationCheck { get; set; }
 
@@ -47,6 +47,12 @@ namespace EDS_Backend_final.Models
         public int ClientID { get; set; }   
 
         public string? StartTime { get; set; }
+
+        public  string? DayofWeek_Lkp { get; set; }
+
+        //public int? DayofWeek_lkp_id { get; set; }
+
+        //public Lookup? DayOfWeek { get; set; }
 
         public Client? Client { get; set; }
 

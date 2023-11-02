@@ -15,10 +15,10 @@ namespace EDS_Backend_final.ViewModels
 
         public DateTime? StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
-
         //navigation property
         public string FileFormatType { get; set; }
+
+        public string? DayofWeek_Lkp { get; set; }
 
         //navigation property
         public int? OrgsOrganizationID { get; set; }
