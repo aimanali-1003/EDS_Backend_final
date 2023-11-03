@@ -30,7 +30,6 @@ namespace EDS_Backend_final.Services
         public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
         {
             return await _organizationDAL.GetClientsForOrganizationAsync(organizationId);
-        }
-
+        } 
     }
 }
