@@ -80,56 +80,8 @@ namespace EDS_Backend_final.Controllers
                 
             };
 
-            //var createDataRecipient = await _recipientService.CreateDataRecipientAsync(_mapper.Map<DataRecipient>(dataRecipient));
-
-
-            int? frequencyid = await _frequencyService.GetFrequencyIdAsync(job.FrequencyType);
-
-            //int DataRecipientID = createDataRecipient.RecipientID;
-            int DataRecipientID = 1;
-            int? fileformatid = await _jobService.GetFileFormatIdAsync(job.FileFormatType);
-            var jobEntity = new Job
-            {
-                FileFormatID = (int)fileformatid,
-                DataRecipientID = DataRecipientID,
-                FrequencyID = (int)frequencyid,
-                TemplateID = job.TemplateID,
-                JobID = job.JobID,
-                JobType = job.JobType,
-                StartDate = job.StartDate,
-                ClientID = job.ClientID,
-                StartTime = job.StartTime,
-                DayofWeek_Lkp = job.DayofWeek_Lkp
-            };
-            Console.WriteLine(jobEntity);
-
-            var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(jobEntity));
-            string serializedJob = JsonSerializer.Serialize(createdJob, jsonSerializerOptions);
-            return Content(serializedJob, "application/json");
-
-        }
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateJob(int id, [FromBody] JobViewModel job)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var client = await _dbContext.Clients.FindAsync(job.ClientID);
-            var dataRecipientType = await _dbContext.DataRecipientType.FindAsync(job.RecipientTypeID);
-
-            var dataRecipient = new DataRecipient
-            {
-                ClientID = job.ClientID,
-                RecipientTypeID = job.RecipientTypeID,
-                Client = client,
-
-            };
-
             var createDataRecipient = await _recipientService.CreateDataRecipientAsync(_mapper.Map<DataRecipient>(dataRecipient));
+
 
             int? frequencyid = await _frequencyService.GetFrequencyIdAsync(job.FrequencyType);
 
@@ -146,15 +98,66 @@ namespace EDS_Backend_final.Controllers
                 StartDate = job.StartDate,
                 ClientID = job.ClientID,
                 StartTime = job.StartTime,
-                DayofWeek_Lkp = job.DayofWeek_Lkp
+                DayofWeek_Lkp = job.DayofWeek_Lkp,
+                NotificationCheck = job.NotificationCheck,
+                MinRecordCountAlarm = job.MinRecordCountAlarm,
+                MaxRecordCountAlarm = job.MaxRecordCountAlarm,
+                MinRunDurationAlarm = job.MinRunDurationAlarm,
+                MaxRunDurationAlarm = job.MaxRunDurationAlarm
             };
+            Console.WriteLine(jobEntity);
 
-            // Update the job entity using the provided data
-            var updatedJob = await _jobService.UpdateJobAsync(id, _mapper.Map<Job>(jobEntity));
+            var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(jobEntity));
+            string serializedJob = JsonSerializer.Serialize(createdJob, jsonSerializerOptions);
+            return Content(serializedJob, "application/json");
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateJob(int id, [FromBody] JobViewModel job)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Load the existing Job entity from the database by its ID
+            var existingJob = await _dbContext.Job.FindAsync(id);
+
+            if (existingJob == null)
+            {
+                return NotFound(); // Job with the specified ID not found
+            }
+
+            // Update the properties of the existing Job entity with the values from JobViewModel
+            existingJob.TemplateID = job.TemplateID;
+            existingJob.JobID = job.JobID;
+            existingJob.JobType = job.JobType;
+            existingJob.StartDate = job.StartDate;
+            existingJob.ClientID = job.ClientID;
+            existingJob.StartTime = job.StartTime;
+            existingJob.DayofWeek_Lkp = job.DayofWeek_Lkp;
+            existingJob.NotificationCheck = job.NotificationCheck;
+            existingJob.MinRecordCountAlarm = job.MinRecordCountAlarm;
+            existingJob.MaxRecordCountAlarm = job.MaxRecordCountAlarm;
+            existingJob.MinRunDurationAlarm = job.MinRunDurationAlarm;
+            existingJob.MaxRunDurationAlarm = job.MaxRunDurationAlarm;
+
+            var existingDataRecipient = await _dbContext.DataRecipient.FindAsync(existingJob.DataRecipientID);
+
+            existingDataRecipient.RecipientTypeID = job.RecipientTypeID;
+            existingJob.UpdatedBy = "M.Zamaan";
+
+
+            _dbContext.Job.Update(existingJob);
+            _dbContext.DataRecipient.Update(existingDataRecipient);
+            await _dbContext.SaveChangesAsync();
 
             // Optionally, you can return the updated job data in the response
-            return Ok(_mapper.Map<JobViewModel>(updatedJob));
+            string serializedJob = JsonSerializer.Serialize(existingJob, jsonSerializerOptions);
+            return Content(serializedJob, "application/json");
         }
+
 
 
 
