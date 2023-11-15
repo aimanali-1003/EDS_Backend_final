@@ -27,8 +27,12 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<IEnumerable<Template>> GetAllTemplatesAsync()
         {
-            var resp = await _dbContext.Template.OrderByDescending(t => t.CreatedAt).ToListAsync();
-            // Implement logic to retrieve all Template from your database
+            var resp = await _dbContext.Template
+            .Where(t => !t.IsDeleted)
+            .OrderByDescending(t => t.CreatedAt)
+            .ToListAsync();
+
+            // Implement logic to retrieve all active templates from your database
             return resp;
         }
 
@@ -36,7 +40,7 @@ namespace EDS_Backend_final.DataAccess
         public async Task<Template> CreateTemplateAsync(Template template)
         {
             template.CreatedAt = DateTime.Now;
-            template.CreatedBy = "Zamaan"; 
+            template.CreatedBy = "Zamaan";
             template.Active = true;
             _dbContext.Template.Add(template);
             await _dbContext.SaveChangesAsync();
@@ -53,7 +57,7 @@ namespace EDS_Backend_final.DataAccess
             // Update the properties of the existing template with the new data
             existingTemplate.UpdatedAt = DateTime.Now; // Set the updated timestamp
             existingTemplate.UpdatedBy = template.UpdatedBy;
-            existingTemplate.Active=template.Active;
+            existingTemplate.Active = template.Active;
             existingTemplate.TemplateName = template.TemplateName;
             existingTemplate.CategoryID = template.CategoryID;
 
@@ -65,22 +69,26 @@ namespace EDS_Backend_final.DataAccess
         {
             try
             {
-                var templateColumns = _dbContext.TemplateColumns.Where(tc => tc.TemplateID == id);
-                _dbContext.TemplateColumns.RemoveRange(templateColumns);
+                var templateColumns = await _dbContext.TemplateColumns.Where(tc => tc.TemplateID == id).ToListAsync();
+                foreach (var templateColumn in templateColumns)
+                {
+                    templateColumn.Active = false;
+                    templateColumn.IsDeleted = true;
+                }
 
                 var template = await _dbContext.Template.FindAsync(id);
                 if (template == null)
                     return false; // Template not found
+                template.Active = false;
+                template.IsDeleted = true;
 
-                _dbContext.Template.Remove(template);
                 await _dbContext.SaveChangesAsync();
-                return true; // Deletion was successful
+                return true; // Soft deletion was successful
             }
             catch (Exception ex)
             {
-                // Handle the exception or log the error message
-                Console.WriteLine("Error occurred during deletion: " + ex.Message);
-                return false;
+                // Handle exceptions here
+                return false; // Soft deletion failed
             }
         }
 
@@ -103,6 +111,13 @@ namespace EDS_Backend_final.DataAccess
             var lastTemplateId = await _dbContext.Template.OrderByDescending(t => t.TemplateID).Select(t => t.TemplateID).FirstOrDefaultAsync();
             return lastTemplateId;
         }
+
+        public async Task<bool> GetJobOfTemplate(int id)
+        {
+            var jobExists = await _dbContext.Job.AnyAsync(j => j.TemplateID == id);
+            return jobExists;
+        }
+
 
     }
 }

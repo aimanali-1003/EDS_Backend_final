@@ -1,10 +1,8 @@
-﻿using EDS_Backend_final.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EDS_Backend_final.ViewModels
 {
-    public class JobViewModel
+    public class UpdateJobModel
     {
         [Key]
         public int JobID { get; set; }
@@ -34,16 +32,5 @@ namespace EDS_Backend_final.ViewModels
         //public DateTime? EndTime { get; set; }
 
         public int? FrequencyID { get; set; }
-
-        public bool? NotificationCheck { get; set; }
-
-        public int? MinRecordCountAlarm { get; set; }
-
-        public int? MaxRecordCountAlarm { get; set; }
-
-        public int? MinRunDurationAlarm { get; set; }
-
-        public int? MaxRunDurationAlarm { get; set; }
-
     }
 }

@@ -24,32 +24,6 @@ namespace EDS_Backend_final.Services
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await _categoryDAL.GetAllCategoriesAsync();
-        }
-
-        public async Task<Category> CreateCategoryAsync(Category category)
-        {
-            return await _categoryDAL.CreateCategoryAsync(category);
-        }
-
-        public async Task<Category> UpdateCategoryAsync(int id, Category category)
-        {
-       return await _categoryDAL.UpdateCategoryAsync(id, category);
-        }
-
-        public async Task<bool> DeleteCategoryAsync(int id)
-        {
-            return await _categoryDAL.DeleteCategoryAsync(id);
-        }
-
-        //public async Task<IEnumerable<Columns>> GetCategoryColumnsAsync(int categoryId)
-        //{
-        //    // Implement logic to call the CategoryDAL's GetCategoryColumnsAsync method
-        //    return await _categoryDAL.GetCategoryColumnsAsync(categoryId);
-        //}
-
-        //public async Task<IEnumerable<Category>> GetCategoriesWithColumnsAsync()
-        //{
-        //    return await _categoryDAL.GetCategoriesWithColumnsAsync();
-        //}
+        } 
     }
 }

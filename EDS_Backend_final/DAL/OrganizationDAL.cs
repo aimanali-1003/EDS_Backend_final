@@ -30,34 +30,34 @@ namespace EDS_Backend_final.DataAccess
             return await _dbContext.Org.ToListAsync();
         }
 
-        public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
-        {
-            try
-            {
-                var clientViewModels = await _dbContext.Clients
-                    .Where(c => c.OrgsOrganizationID == organizationId)
-                    .Join(
-                        _dbContext.Org,
-                        client => client.Orgs.OrganizationID,
-                        org => org.OrganizationID,
-                        (client, org) => new ClientViewModel
-                        {
-                            ClientID = client.ClientID,
-                            ClientName = client.ClientName,
-                            ClientCode = client.ClientCode,
+        //public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
+        //{
+        //    try
+        //    {
+        //        var clientViewModels = await _dbContext.Clients
+        //            .Where(c => c.OrgsOrganizationID == organizationId)
+        //            .Join(
+        //                _dbContext.Org,
+        //                client => client.Orgs.OrganizationID,
+        //                org => org.OrganizationID,
+        //                (client, org) => new ClientViewModel
+        //                {
+        //                    ClientID = client.ClientID,
+        //                    ClientName = client.ClientName,
+        //                    ClientCode = client.ClientCode,
  
-                        }
-                    )
-                    .ToListAsync();
+        //                }
+        //            )
+        //            .ToListAsync();
 
-                return clientViewModels;
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
-                throw;
-            }
+        //        return clientViewModels;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exceptions appropriately (e.g., log or throw custom exceptions)
+        //        throw;
+        //    }
         
-        }
+        //}
     }
 }

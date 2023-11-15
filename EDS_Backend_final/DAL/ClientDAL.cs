@@ -27,9 +27,10 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
-            // Implement logic to retrieve all clients from your database
+            // Implement logic to retrieve all active clients from your database
             return await _dbContext.Clients.ToListAsync();
         }
+
 
         public async Task<Client> CreateClientAsync(Client client)
         {
@@ -63,23 +64,26 @@ namespace EDS_Backend_final.DataAccess
         {
             // Implement logic to update a client in your database
             var existingClient = await _dbContext.Clients.FindAsync(id);
-            if (existingClient == null)
-                return null; // Client not found
 
             if (existingClient == null)
             {
-                // Category not found, throw a custom exception
-                throw new ValidationException("Category not found");
+                // Client not found, throw a custom exception
+                throw new ValidationException("Client not found");
             }
 
             if (!IsValidAlphanumeric(client.ClientCode) || !IsValidAlphanumeric(client.ClientName))
             {
-                throw new ValidationException("Category code or name contains invalid characters");
+                throw new ValidationException("Client code or name contains invalid characters");
             }
 
             if (client.ClientCode == existingClient.ClientCode && client.ClientName == existingClient.ClientName && client.Active == existingClient.Active)
             {
                 throw new ValidationException("No changes were made");
+            }
+
+            if (_dbContext.Job.Any(j => j.ClientID == id ))
+            {
+                throw new ValidationException("Client cannot be deactivated as it is present in the active job");
             }
 
             // Update the properties of the existing client with the new data
@@ -91,6 +95,7 @@ namespace EDS_Backend_final.DataAccess
 
             await _dbContext.SaveChangesAsync();
             return existingClient;
+
         }
 
         public async Task<bool> DeleteClientAsync(int id)
@@ -98,11 +103,11 @@ namespace EDS_Backend_final.DataAccess
             var client = await _dbContext.Clients.FindAsync(id);
             if (client == null)
                 return false;
-
-            _dbContext.Clients.Remove(client);
+            client.Active = false; 
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<Org> GetOrgByIdAsync(int organizationId)
         {
@@ -119,33 +124,33 @@ namespace EDS_Backend_final.DataAccess
             }
         }
 
-        public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
-        {
-            try
-            {
-                var orgViewModels = await _dbContext.Clients
-                    .Where(c => c.ClientID == clientId)
-                    .Join(
-                        _dbContext.Org,
-                        client => client.Orgs.OrganizationID,
-                        org => org.OrganizationID,
-                        (client, org) => new OrgVM
-                        {
-                            OrganizationID = org.OrganizationID,
-                            OrganizationCode = org.OrganizationCode,
-                            OrganizationLevel = org.OrganizationLevel
-                        }
-                    )
-                    .ToListAsync();
+        //public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
+        //{
+        //    try
+        //    {
+        //        var orgViewModels = await _dbContext.Clients
+        //            .Where(c => c.ClientID == clientId)
+        //            .Join(
+        //                _dbContext.Org,
+        //                client => client.Orgs.OrganizationID,
+        //                org => org.OrganizationID,
+        //                (client, org) => new OrgVM
+        //                {
+        //                    OrganizationID = org.OrganizationID,
+        //                    OrganizationCode = org.OrganizationCode,
+        //                    OrganizationLevel = org.OrganizationLevel
+        //                }
+        //            )
+        //            .ToListAsync();
 
-                return orgViewModels;
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
-                throw;
-            }
-        }
+        //        return orgViewModels;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exceptions appropriately (e.g., log or throw custom exceptions)
+        //        throw;
+        //    }
+        //}
 
         private async Task<bool> IsCategoryCodeUniqueAsync(string categoryCode, int categoryId)
         {

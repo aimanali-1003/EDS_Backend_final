@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EDS_Backend_final.DataAccess;
 using EDS_Backend_final.DataContext;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace EDS_Backend_final.Controllers
 {
@@ -49,6 +50,7 @@ namespace EDS_Backend_final.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTemplate([FromBody] TemplateViewModel templateData)
         {
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -90,6 +92,14 @@ namespace EDS_Backend_final.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTemplate(int id, [FromBody] UpdateTemplateVM templateVM)
         {
+            if(!templateVM.Active)
+            {
+                if (_dbContext.Job.Any(j => j.TemplateID == id))
+                {
+                    throw new ValidationException("Template cannot be deactivated as it is present in the active job");
+                }
+            }
+           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -137,28 +147,31 @@ namespace EDS_Backend_final.Controllers
             return Ok(lastTemplateId);
         }
 
+        //[HttpGet("getJob")]
+        //public async Task<IActionResult> GetJobAssociatedWithTemplate(int templateId)
+        //{
+        //    var getJob = await _templateService.GetJob(templateId);
+        //    return Ok(getJob);
+        //}
+
         [HttpGet("GetColumnsOfTemplate")]
         public async Task<IActionResult> GetColumnsOfTemplate(int templateId)
         {
             try
-            {
-                var columnIds = await _dbContext.TemplateColumns
-                    .Where(tc => tc.TemplateID == templateId)
-                    .Select(tc => tc.ColumnsID)
-                    .ToListAsync();
+            { 
 
-                if (columnIds == null || columnIds.Count == 0)
+                var TmplateColumn = await _dbContext.TemplateColumns
+                .Include(tc => tc.Column)
+                .Where(tc => tc.TemplateID == templateId)
+                .OrderBy(tc => tc.TemplateColumnID)
+                .ToListAsync();
+
+                if (TmplateColumn == null || !TmplateColumn.Any())
                     return NotFound();
+                
 
-                var columns = await _dbContext.Columns
-                    .Where(c => columnIds.Contains(c.ColumnsID))
-                    .Select(c => c.ColumnName)
-                    .ToListAsync();
-
-                if (columns == null || columns.Count == 0)
-                    return NotFound();
-
-                return Ok(columns);
+                var res = TmplateColumn.Select(tc => tc.Column.ColumnName).ToList();
+                return Ok(res);
             }
             catch (Exception ex)
             {

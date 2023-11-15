@@ -53,7 +53,10 @@ namespace EDS_Backend_final.Services
             return lastTemplateId;
         }
 
-
+        public async Task<bool> GetJob(int templateId)
+        {
+            return await _templateDAL.GetJobOfTemplate(templateId);
+        }
 
     }
 }

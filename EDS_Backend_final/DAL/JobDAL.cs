@@ -26,7 +26,7 @@ namespace EDS_Backend_final.DataAccess
         public async Task<IEnumerable<Job>> GetAllJobsAsync()
         {
             // Implement logic to retrieve all Job from your database
-            return await _dbContext.Job.ToListAsync();
+            return await _dbContext.Job.Where(j => !j.IsDeleted).ToListAsync();
         }
 
         public async Task<Job> CreateJobAsync(Job job)
@@ -56,14 +56,15 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<bool> DeleteJobAsync(int id)
         {
-            // Implement logic to delete a job from your database
+            // Implement logic to soft delete a job from your database
             var job = await _dbContext.Job.FindAsync(id);
             if (job == null)
                 return false; // Job not found
 
-            _dbContext.Job.Remove(job);
+            job.Active = false;
+            job.IsDeleted = true; // Set IsDeleted to true
             await _dbContext.SaveChangesAsync();
-            return true; // Deletion was successful
+            return true; // Soft deletion was successful
         }
 
         public async Task<IEnumerable<FileFormat>> GetAllFileFormatsAsync()
@@ -94,7 +95,8 @@ namespace EDS_Backend_final.DataAccess
         .Include(job => job.Template)
         .Include(job => job.FileFormat)
         .Include(job => job.DataRecipient)
-        .FirstOrDefaultAsync(job => job.JobID == jobId);
+        .Include(job => job.Client)
+        .FirstOrDefaultAsync(job => job.JobID == jobId && job.Template.Active);
 
             // Include RecipientTypeName from DataRecipientType
             if (job != null)
@@ -105,13 +107,10 @@ namespace EDS_Backend_final.DataAccess
                 if (recipientType != null)
                 {
                     job.DataRecipient.DataRecipientType = recipientType;
-                }
+                } 
             }
 
             return job;
-
-
-
         }
     }
 }

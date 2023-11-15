@@ -42,38 +42,38 @@ namespace EDS_Backend_final.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateClient([FromBody] ClientViewModel client)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                var org = await _clientService.GetOrgByIdAsync(client.OrganizationID);
+        //public async Task<IActionResult> CreateClient([FromBody] ClientViewModel client)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    try
+        //    {
+        //        var org = await _clientService.GetOrgByIdAsync(client.OrganizationID);
 
-                if (org == null)
-                {
-                    return NotFound("Organization not found");
-                }
+        //        if (org == null)
+        //        {
+        //            return NotFound("Organization not found");
+        //        }
 
-                var clientEntity = new Client
-                {
-                    ClientName = client.ClientName,
-                    ClientCode = client.ClientCode,
-                    Orgs = org // Assign the Org instance to the Client's Orgs navigation property
-                };
+        //        var clientEntity = new Client
+        //        {
+        //            ClientName = client.ClientName,
+        //            ClientCode = client.ClientCode,
+        //            Orgs = org // Assign the Org instance to the Client's Orgs navigation property
+        //        };
 
-                var createdClient = await _clientService.CreateClientAsync(_mapper.Map<Client>(clientEntity));
-                return CreatedAtAction(nameof(GetClient), new { id = createdClient.ClientID }, _mapper.Map<ClientViewModel>(createdClient));
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        //        var createdClient = await _clientService.CreateClientAsync(_mapper.Map<Client>(clientEntity));
+        //        return CreatedAtAction(nameof(GetClient), new { id = createdClient.ClientID }, _mapper.Map<ClientViewModel>(createdClient));
+        //    }
+        //    catch (ValidationException ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
 
 
-        }
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClient(int id, [FromBody] UpdateClientVM clientVM)
@@ -92,6 +92,12 @@ namespace EDS_Backend_final.Controllers
                 {
                     return NotFound("Organization not found");
                 }
+                //var clientExistsInJobTable = await _clientService.CheckIfClientExistsInJobTableAsync(id);
+
+                //if (clientExistsInJobTable)
+                //{
+                //    return BadRequest("Cannot deactivate the client as it exists in the job table.");
+                //}
 
                 var updatedClient = await _clientService.UpdateClientAsync(id, client);
 
@@ -117,19 +123,19 @@ namespace EDS_Backend_final.Controllers
             return NoContent();
         }
 
-        [HttpGet("{clientId}/Organizations")]
-        public async Task<IActionResult> GetOrganizationsForClient(int clientId)
-        {
-            try
-            {
-                var orgViewModels = await _clientService.GetOrganizationsForClientAsync(clientId);
-                return Ok(orgViewModels);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately (e.g., log or return an error response)
-                return StatusCode(500, "An error occurred while retrieving organizations for the client.");
-            }
-        }
+        //[HttpGet("{clientId}/Organizations")]
+        //public async Task<IActionResult> GetOrganizationsForClient(int clientId)
+        //{
+        //    try
+        //    {
+        //        var orgViewModels = await _clientService.GetOrganizationsForClientAsync(clientId);
+        //        return Ok(orgViewModels);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exceptions appropriately (e.g., log or return an error response)
+        //        return StatusCode(500, "An error occurred while retrieving organizations for the client.");
+        //    }
+        //}
     }
 }

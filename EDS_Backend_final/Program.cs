@@ -12,7 +12,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<DBContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DBContext>(options =>
+{
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptionsBuilder =>
+        {
+            sqlServerOptionsBuilder.EnableRetryOnFailure(
+                maxRetryCount: 5, // The maximum number of retry attempts
+                maxRetryDelay: TimeSpan.FromSeconds(30), // The maximum delay between retries
+                errorNumbersToAdd: null // List of specific error numbers to consider transient
+            );
+        });
+});
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 //category
@@ -88,7 +100,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 var app = builder.Build();
-app.UseCors();
+//app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -97,8 +109,8 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
-//app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()); //allowing angular app to talk to api
+app.UseHttpsRedirection();
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()); //allowing angular app to talk to api
 
 app.UseAuthorization();
 

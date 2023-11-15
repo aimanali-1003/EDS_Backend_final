@@ -10,7 +10,6 @@ namespace EDS_Backend_final.Interfaces
         Task<Org> GetOrganizationAsync(int id);
         Task<IEnumerable<Org>> GetAllOrganizationsAsync();
 
-        Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId);
-
+        //Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId); 
     }
 }

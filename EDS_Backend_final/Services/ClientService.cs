@@ -42,14 +42,20 @@ namespace EDS_Backend_final.Services
             return await _clientDAL.DeleteClientAsync(id);
         }
 
+        //public async Task<bool> CheckIfClientExistsInJobTableAsync(int clientId)
+        //{
+        //    var clientExistsInJobTable = await _clientDAL.CheckIfClientExists(clientId);
+        //    return clientExistsInJobTable;
+        //}
+
         public async Task<Org> GetOrgByIdAsync(int organizationId)
         {
             return await _clientDAL.GetOrgByIdAsync(organizationId);
         }
 
-        public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
-        {
-            return await _clientDAL.GetOrganizationsForClientAsync(clientId);
-        }
+        //public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
+        //{
+        //    return await _clientDAL.GetOrganizationsForClientAsync(clientId);
+        //}
     }
 }
