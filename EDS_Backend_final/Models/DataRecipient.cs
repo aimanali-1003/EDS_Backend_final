@@ -16,6 +16,9 @@ namespace EDS_Backend_final.Models
 
         public int? RecipientTypeID { get; set; }
 
+        public int? DataRecipientTypeRecipientTypeID { get; set; } //remove from here
+
         public DataRecipientType? DataRecipientType { get; set; }
+
     }
 }

@@ -22,6 +22,47 @@ namespace EDS_Backend_final.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.Property<int>("ClientID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientID"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ClientCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ClientID");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("DayOfWeekFrequency", b =>
                 {
                     b.Property<int>("DaysOfWeekDayOfWeekId")
@@ -76,52 +117,6 @@ namespace EDS_Backend_final.Migrations
                     b.HasKey("CategoryID");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("EDS_Backend_final.Models.Client", b =>
-                {
-                    b.Property<int>("ClientID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientID"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ClientCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClientName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OrgsOrganizationID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ClientID");
-
-                    b.HasIndex("OrgsOrganizationID");
-
-                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("EDS_Backend_final.Models.Columns", b =>
@@ -416,6 +411,9 @@ namespace EDS_Backend_final.Migrations
                     b.Property<int>("DataRecipientID")
                         .HasColumnType("int");
 
+                    b.Property<string>("DayofWeek_Lkp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("FileFormatID")
                         .HasColumnType("int");
 
@@ -676,55 +674,6 @@ namespace EDS_Backend_final.Migrations
                     b.ToTable("NotificationRecipient");
                 });
 
-            modelBuilder.Entity("EDS_Backend_final.Models.Org", b =>
-                {
-                    b.Property<int>("OrganizationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrganizationID"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OrganizationCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrganizationLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ParentOrganizationCode")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("ParentOrganizationLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("OrganizationID");
-
-                    b.ToTable("Org");
-                });
-
             modelBuilder.Entity("EDS_Backend_final.Models.OrgLevel", b =>
                 {
                     b.Property<int>("OrganizationLevelID")
@@ -908,6 +857,60 @@ namespace EDS_Backend_final.Migrations
                     b.ToTable("OrgVM");
                 });
 
+            modelBuilder.Entity("Org", b =>
+                {
+                    b.Property<int>("OrganizationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrganizationID"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ClientID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OrganizationCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentOrganizationCode")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ParentOrganizationLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrganizationID");
+
+                    b.HasIndex("ClientID");
+
+                    b.ToTable("Org");
+                });
+
             modelBuilder.Entity("DayOfWeekFrequency", b =>
                 {
                     b.HasOne("EDS_Backend_final.Models.DayOfWeek", null)
@@ -921,17 +924,6 @@ namespace EDS_Backend_final.Migrations
                         .HasForeignKey("FrequencyID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EDS_Backend_final.Models.Client", b =>
-                {
-                    b.HasOne("EDS_Backend_final.Models.Org", "Orgs")
-                        .WithMany("Clients")
-                        .HasForeignKey("OrgsOrganizationID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Orgs");
                 });
 
             modelBuilder.Entity("EDS_Backend_final.Models.Columns", b =>
@@ -964,7 +956,7 @@ namespace EDS_Backend_final.Migrations
 
             modelBuilder.Entity("EDS_Backend_final.Models.DataRecipient", b =>
                 {
-                    b.HasOne("EDS_Backend_final.Models.Client", "Client")
+                    b.HasOne("Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientID");
 
@@ -985,7 +977,7 @@ namespace EDS_Backend_final.Migrations
 
             modelBuilder.Entity("EDS_Backend_final.Models.Job", b =>
                 {
-                    b.HasOne("EDS_Backend_final.Models.Client", "Client")
+                    b.HasOne("Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1062,7 +1054,7 @@ namespace EDS_Backend_final.Migrations
 
             modelBuilder.Entity("EDS_Backend_final.Models.NotificationRecipient", b =>
                 {
-                    b.HasOne("EDS_Backend_final.Models.Client", "Client")
+                    b.HasOne("Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1079,7 +1071,7 @@ namespace EDS_Backend_final.Migrations
 
             modelBuilder.Entity("EDS_Backend_final.Models.OrgLevel", b =>
                 {
-                    b.HasOne("EDS_Backend_final.Models.Org", "Org")
+                    b.HasOne("Org", "Org")
                         .WithMany("Levels")
                         .HasForeignKey("OrganizationID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1116,6 +1108,22 @@ namespace EDS_Backend_final.Migrations
                     b.Navigation("Column");
 
                     b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("Org", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("Orgs")
+                        .HasForeignKey("ClientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.Navigation("Orgs");
                 });
 
             modelBuilder.Entity("EDS_Backend_final.Models.Category", b =>
@@ -1156,13 +1164,6 @@ namespace EDS_Backend_final.Migrations
                     b.Navigation("NotificationRecipients");
                 });
 
-            modelBuilder.Entity("EDS_Backend_final.Models.Org", b =>
-                {
-                    b.Navigation("Clients");
-
-                    b.Navigation("Levels");
-                });
-
             modelBuilder.Entity("EDS_Backend_final.Models.Template", b =>
                 {
                     b.Navigation("Jobs");
@@ -1173,6 +1174,11 @@ namespace EDS_Backend_final.Migrations
             modelBuilder.Entity("EDS_Backend_final.Models.TemplateColumns", b =>
                 {
                     b.Navigation("Criterias");
+                });
+
+            modelBuilder.Entity("Org", b =>
+                {
+                    b.Navigation("Levels");
                 });
 #pragma warning restore 612, 618
         }

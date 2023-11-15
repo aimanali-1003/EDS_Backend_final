@@ -96,7 +96,7 @@ namespace EDS_Backend_final.DataAccess
         .Include(job => job.FileFormat)
         .Include(job => job.DataRecipient)
         .Include(job => job.Client)
-        .FirstOrDefaultAsync(job => job.JobID == jobId);
+        .FirstOrDefaultAsync(job => job.JobID == jobId && job.Template.Active);
 
             // Include RecipientTypeName from DataRecipientType
             if (job != null)
@@ -107,7 +107,7 @@ namespace EDS_Backend_final.DataAccess
                 if (recipientType != null)
                 {
                     job.DataRecipient.DataRecipientType = recipientType;
-                }
+                } 
             }
 
             return job;

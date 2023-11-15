@@ -15,7 +15,7 @@ namespace EDS_Backend_final.Interfaces
 
         Task<Org> GetOrgByIdAsync(int organizationId);
 
-        Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId);
+       // Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId);
         //Task<bool> CheckIfClientExistsInJobTableAsync(int id);
     }
 }

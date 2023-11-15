@@ -28,7 +28,7 @@ namespace EDS_Backend_final.DataAccess
         public async Task<IEnumerable<Client>> GetAllClientsAsync()
         {
             // Implement logic to retrieve all active clients from your database
-            return await _dbContext.Clients.Where(client =>client.Active).ToListAsync();
+            return await _dbContext.Clients.ToListAsync();
         }
 
 
@@ -124,33 +124,33 @@ namespace EDS_Backend_final.DataAccess
             }
         }
 
-        public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
-        {
-            try
-            {
-                var orgViewModels = await _dbContext.Clients
-                    .Where(c => c.ClientID == clientId)
-                    .Join(
-                        _dbContext.Org,
-                        client => client.Orgs.OrganizationID,
-                        org => org.OrganizationID,
-                        (client, org) => new OrgVM
-                        {
-                            OrganizationID = org.OrganizationID,
-                            OrganizationCode = org.OrganizationCode,
-                            OrganizationLevel = org.OrganizationLevel
-                        }
-                    )
-                    .ToListAsync();
+        //public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
+        //{
+        //    try
+        //    {
+        //        var orgViewModels = await _dbContext.Clients
+        //            .Where(c => c.ClientID == clientId)
+        //            .Join(
+        //                _dbContext.Org,
+        //                client => client.Orgs.OrganizationID,
+        //                org => org.OrganizationID,
+        //                (client, org) => new OrgVM
+        //                {
+        //                    OrganizationID = org.OrganizationID,
+        //                    OrganizationCode = org.OrganizationCode,
+        //                    OrganizationLevel = org.OrganizationLevel
+        //                }
+        //            )
+        //            .ToListAsync();
 
-                return orgViewModels;
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
-                throw;
-            }
-        }
+        //        return orgViewModels;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exceptions appropriately (e.g., log or throw custom exceptions)
+        //        throw;
+        //    }
+        //}
 
         private async Task<bool> IsCategoryCodeUniqueAsync(string categoryCode, int categoryId)
         {
