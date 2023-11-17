@@ -46,7 +46,7 @@ namespace EDS_Backend_final.DataAccess
             if (existingJob == null)
                 return null; // Job not found
 
-
+            existingJob.Active = job.Active;
             existingJob.UpdatedAt = DateTime.Now; // Set the updated timestamp
             existingJob.UpdatedBy = job.UpdatedBy;
 

@@ -11,7 +11,8 @@ namespace EDS_Backend_final.Interfaces
         Task<Template> GetTemplateAsync(int id);
         Task<IEnumerable<Template>> GetAllTemplatesAsync();
         Task<Template> CreateTemplateAsync(Template template);
-        Task<Template> UpdateTemplateAsync(int id, Template template);
+        Task<(Template UpdatedTemplate, List<Job> ActiveJobs)> UpdateTemplateAsync(int id, Template template);
+
         Task<bool> DeleteTemplateAsync(int id);
         Task<int> GetLastCreatedTemplateIdAsync();
         Task<bool> GetJob(int id);

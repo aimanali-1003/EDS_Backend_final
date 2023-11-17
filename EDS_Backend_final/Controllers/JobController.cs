@@ -142,6 +142,7 @@ namespace EDS_Backend_final.Controllers
             existingJob.MaxRecordCountAlarm = job.MaxRecordCountAlarm;
             existingJob.MinRunDurationAlarm = job.MinRunDurationAlarm;
             existingJob.MaxRunDurationAlarm = job.MaxRunDurationAlarm;
+            //existingJob.Active = job.Active;
 
             var existingDataRecipient = await _dbContext.DataRecipient.FindAsync(existingJob.DataRecipientID);
 

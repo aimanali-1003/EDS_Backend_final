@@ -92,13 +92,13 @@ namespace EDS_Backend_final.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTemplate(int id, [FromBody] UpdateTemplateVM templateVM)
         {
-            if(!templateVM.Active)
-            {
-                if (_dbContext.Job.Any(j => j.TemplateID == id))
-                {
-                    throw new ValidationException("Template cannot be deactivated as it is present in the active job");
-                }
-            }
+            //if(!templateVM.Active)
+            //{
+            //    if (_dbContext.Job.Any(j => j.TemplateID == id))
+            //    {
+            //        throw new ValidationException("Template cannot be deactivated as it is present in the active job");
+            //    }
+            //}
            
             if (!ModelState.IsValid)
             {
@@ -120,10 +120,17 @@ namespace EDS_Backend_final.Controllers
             
 
             var template = _mapper.Map<Template>(templateVM);
-            var updatedTemplate = await _templateService.UpdateTemplateAsync(id, template);
+            var (updatedTemplate, activeJobs) = await _templateService.UpdateTemplateAsync(id, template);
             if (updatedTemplate == null)
             {
-                return NotFound();
+                if (activeJobs != null && activeJobs.Any())
+                {
+                    return Ok(new { Message = "Template cannot be deactivated as it is present in the active job", ActiveJobs = activeJobs });
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
 
             var updatedTemplateVM = _mapper.Map<Template>(templateVM);

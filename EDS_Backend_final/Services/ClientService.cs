@@ -53,9 +53,9 @@ namespace EDS_Backend_final.Services
             return await _clientDAL.GetOrgByIdAsync(organizationId);
         }
 
-        //public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
-        //{
-        //    return await _clientDAL.GetOrganizationsForClientAsync(clientId);
-        //}
+        public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
+        {
+            return await _clientDAL.GetOrganizationsForClientAsync(clientId);
+        }
     }
 }

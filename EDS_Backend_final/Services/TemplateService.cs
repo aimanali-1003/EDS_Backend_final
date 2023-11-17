@@ -33,7 +33,7 @@ namespace EDS_Backend_final.Services
             return await _templateDAL.CreateTemplateAsync(template);
         }
 
-        public async Task<Template> UpdateTemplateAsync(int id, Template template)
+        public async Task<(Template UpdatedTemplate, List<Job> ActiveJobs)> UpdateTemplateAsync(int id, Template template)
         {
             return await _templateDAL.UpdateTemplateAsync(id, template);
         }
@@ -57,6 +57,6 @@ namespace EDS_Backend_final.Services
         {
             return await _templateDAL.GetJobOfTemplate(templateId);
         }
-
+         
     }
 }

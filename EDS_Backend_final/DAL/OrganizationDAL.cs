@@ -30,34 +30,45 @@ namespace EDS_Backend_final.DataAccess
             return await _dbContext.Org.ToListAsync();
         }
 
-        //public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
-        //{
-        //    try
-        //    {
-        //        var clientViewModels = await _dbContext.Clients
-        //            .Where(c => c.OrgsOrganizationID == organizationId)
-        //            .Join(
-        //                _dbContext.Org,
-        //                client => client.Orgs.OrganizationID,
-        //                org => org.OrganizationID,
-        //                (client, org) => new ClientViewModel
-        //                {
-        //                    ClientID = client.ClientID,
-        //                    ClientName = client.ClientName,
-        //                    ClientCode = client.ClientCode,
- 
-        //                }
-        //            )
-        //            .ToListAsync();
+        public async Task<IEnumerable<Org>> SearchOrgs(string searchTerm)
+        {
+            return await _dbContext.Org
+            .Where(org =>
+                org.OrganizationLevel.ToLower().Contains(searchTerm) ||
+                org.OrganizationCode.ToLower().Contains(searchTerm) ||
+                (org.ParentOrganizationCode != null && org.ParentOrganizationCode.ToLower().Contains(searchTerm))
+            )
+            .ToListAsync();
+        }
 
-        //        return clientViewModels;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle exceptions appropriately (e.g., log or throw custom exceptions)
-        //        throw;
-        //    }
-        
-        //}
+        public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
+        {
+            try
+            {
+                var clientViewModels = await _dbContext.Clients
+                    .Where(c => c.OrgsOrganizationID == organizationId)
+                    .Join(
+                        _dbContext.Org,
+                        client => client.Orgs.OrganizationID,
+                        org => org.OrganizationID,
+                        (client, org) => new ClientViewModel
+                        {
+                            ClientID = client.ClientID,
+                            ClientName = client.ClientName,
+                            ClientCode = client.ClientCode,
+
+                        }
+                    )
+                    .ToListAsync();
+
+                return clientViewModels;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
+                throw;
+            }
+
+        }
     }
 }

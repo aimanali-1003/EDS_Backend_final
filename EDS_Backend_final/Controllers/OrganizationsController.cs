@@ -39,27 +39,32 @@ namespace EDS_Backend_final.Controllers
             return Ok(organization);
         }
 
-        //[HttpGet("{id}/clients")]
-        //public async Task<IActionResult> GetClientsForOrganization(int id)
-        //{
-        //    try
-        //    {
-        //        var organization = await _organizationService.GetOrganizationAsync(id);
-        //        if (organization == null)
-        //        {
-        //            return NotFound();
-        //        }
+        [HttpGet("{id}/clients")]
+        public async Task<IActionResult> GetClientsForOrganization(int id)
+        {
+            try
+            {
+                var organization = await _organizationService.GetOrganizationAsync(id);
+                if (organization == null)
+                {
+                    return NotFound();
+                }
 
-        //        var clients = await _organizationService.GetClientsForOrganizationAsync(id);
-        //        return Ok(clients);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle exceptions, log errors, etc.
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+                var clients = await _organizationService.GetClientsForOrganizationAsync(id);
+                return Ok(clients);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log errors, etc.
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-
+        [HttpGet("search/{searchTerm}")]
+        public async Task<IActionResult> SearchOrganizations(string searchTerm)
+        {
+            var organizations = await _organizationService.SearchOrganizations(searchTerm);
+            return Ok(organizations); 
+        }
     }
 }

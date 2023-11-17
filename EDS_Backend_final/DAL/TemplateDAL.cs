@@ -47,22 +47,63 @@ namespace EDS_Backend_final.DataAccess
             return template;
         }
 
-        public async Task<Template> UpdateTemplateAsync(int id, Template template)
+        public async Task<(Template UpdatedTemplate, List<Job> ActiveJobs)> UpdateTemplateAsync(int id, Template template)
         {
+            if (!template.Active)
+            {
+                var activeJobs = await _dbContext.Job
+                    .Where(j => j.TemplateID == id && j.Active)
+                    .ToListAsync();
+
+                if (activeJobs.Any())
+                {
+                    return (null, activeJobs); 
+                }
+                else
+                {
+                    var existingTemplate = await _dbContext.Template.FindAsync(id);
+                    if (existingTemplate == null)
+                        return (null, null); // Template not found
+
+                    existingTemplate.UpdatedAt = DateTime.Now;
+                    existingTemplate.UpdatedBy = template.UpdatedBy;
+                    existingTemplate.Active = template.Active;
+                    existingTemplate.TemplateName = template.TemplateName;
+                    existingTemplate.CategoryID = template.CategoryID;
+
+                    await _dbContext.SaveChangesAsync();
+
+                    return (existingTemplate, null);
+                }
+
+               
+            }
+            else
+            {
+                var existingTemplate = await _dbContext.Template.FindAsync(id);
+                if (existingTemplate == null)
+                    return (null, null); // Template not found
+
+                existingTemplate.UpdatedAt = DateTime.Now;
+                existingTemplate.UpdatedBy = template.UpdatedBy;
+                existingTemplate.Active = template.Active;
+                existingTemplate.TemplateName = template.TemplateName;
+                existingTemplate.CategoryID = template.CategoryID;
+
+                await _dbContext.SaveChangesAsync();
+
+                return (existingTemplate, null);
+            }
+            //if (!template.Active && _dbContext.Job.Any(j => j.TemplateID == id && j.Active))
+            //{
+            //    var activeJobs = await _dbContext.Job
+            //        .Where(j => j.TemplateID == id && j.Active)
+            //        .ToListAsync();
+
+            //    return (null, activeJobs); // Return null to indicate template not updated, and include the list of active jobs
+            //}
             // Implement logic to update a template in your database
-            var existingTemplate = await _dbContext.Template.FindAsync(id);
-            if (existingTemplate == null)
-                return null; // Template not found
 
-            // Update the properties of the existing template with the new data
-            existingTemplate.UpdatedAt = DateTime.Now; // Set the updated timestamp
-            existingTemplate.UpdatedBy = template.UpdatedBy;
-            existingTemplate.Active = template.Active;
-            existingTemplate.TemplateName = template.TemplateName;
-            existingTemplate.CategoryID = template.CategoryID;
-
-            await _dbContext.SaveChangesAsync();
-            return existingTemplate;
         }
 
         public async Task<bool> DeleteTemplateAsync(int id)

@@ -76,7 +76,7 @@ namespace EDS_Backend_final.DataAccess
                 throw new ValidationException("Client code or name contains invalid characters");
             }
 
-            if (client.ClientCode == existingClient.ClientCode && client.ClientName == existingClient.ClientName && client.Active == existingClient.Active)
+            if (client.ClientCode == existingClient.ClientCode && client.ClientName == existingClient.ClientName && client.Active == existingClient.Active && client.OrgsOrganizationID==existingClient.OrgsOrganizationID)
             {
                 throw new ValidationException("No changes were made");
             }
@@ -124,33 +124,33 @@ namespace EDS_Backend_final.DataAccess
             }
         }
 
-        //public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
-        //{
-        //    try
-        //    {
-        //        var orgViewModels = await _dbContext.Clients
-        //            .Where(c => c.ClientID == clientId)
-        //            .Join(
-        //                _dbContext.Org,
-        //                client => client.Orgs.OrganizationID,
-        //                org => org.OrganizationID,
-        //                (client, org) => new OrgVM
-        //                {
-        //                    OrganizationID = org.OrganizationID,
-        //                    OrganizationCode = org.OrganizationCode,
-        //                    OrganizationLevel = org.OrganizationLevel
-        //                }
-        //            )
-        //            .ToListAsync();
+        public async Task<List<OrgVM>> GetOrganizationsForClientAsync(int clientId)
+        {
+            try
+            {
+                var orgViewModels = await _dbContext.Clients
+                    .Where(c => c.ClientID == clientId)
+                    .Join(
+                        _dbContext.Org,
+                        client => client.Orgs.OrganizationID,
+                        org => org.OrganizationID,
+                        (client, org) => new OrgVM
+                        {
+                            OrganizationID = org.OrganizationID,
+                            OrganizationCode = org.OrganizationCode,
+                            OrganizationLevel = org.OrganizationLevel
+                        }
+                    )
+                    .ToListAsync();
 
-        //        return orgViewModels;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle exceptions appropriately (e.g., log or throw custom exceptions)
-        //        throw;
-        //    }
-        //}
+                return orgViewModels;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately (e.g., log or throw custom exceptions)
+                throw;
+            }
+        }
 
         private async Task<bool> IsCategoryCodeUniqueAsync(string categoryCode, int categoryId)
         {
