@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj": {}
+    "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj": {}
   },
   "projects": {
-    "C:\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj": {
+    "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
+        "projectUniqueName": "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
         "projectName": "EDS_Backend_final",
-        "projectPath": "C:\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
-        "packagesPath": "C:\\Users\\Dev\\.nuget\\packages\\",
-        "outputPath": "C:\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final\\obj\\",
+        "projectPath": "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\EDS_Backend_final.csproj",
+        "packagesPath": "C:\\Users\\win10_pro\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\win10_pro\\Downloads\\EDS_Backend_final\\EDS_Backend_final\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\win10_pro\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +40,28 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.12, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
