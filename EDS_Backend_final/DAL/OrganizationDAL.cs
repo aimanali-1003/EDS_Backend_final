@@ -32,14 +32,43 @@ namespace EDS_Backend_final.DataAccess
 
         public async Task<IEnumerable<Org>> SearchOrgs(string searchTerm)
         {
-            return await _dbContext.Org
-            .Where(org =>
-                org.OrganizationLevel.ToLower().Contains(searchTerm) ||
-                org.OrganizationCode.ToLower().Contains(searchTerm) ||
-                (org.ParentOrganizationCode != null && org.ParentOrganizationCode.ToLower().Contains(searchTerm))
-            )
-            .ToListAsync();
+            var matchingOrgs = await _dbContext.Org
+                .Where(org =>
+                    org.OrganizationLevel.ToLower().Contains(searchTerm) ||
+                    org.OrganizationCode.ToLower().Contains(searchTerm) ||
+                    (org.ParentOrganizationCode != null && org.ParentOrganizationCode.ToLower().Contains(searchTerm))
+                )
+                .ToListAsync();
+
+            foreach (var org in matchingOrgs)
+            {
+                org.PathToParents = GetPathToParents(org);
+            }
+
+            return matchingOrgs;
         }
+
+        private string GetPathToParents(Org org)
+        {
+            var pathToParents = new List<string>();
+            BuildPathToParent(org, pathToParents);
+            return string.Join(" > ", pathToParents.AsEnumerable().Reverse());
+        }
+
+        private void BuildPathToParent(Org org, List<string> pathToParents)
+        {
+            pathToParents.Add(org.OrganizationCode);
+
+            if (org.ParentOrganizationCode != null)
+            {
+                var parentOrg = _dbContext.Org.FirstOrDefault(o => o.OrganizationCode == org.ParentOrganizationCode);
+                if (parentOrg != null)
+                {
+                    BuildPathToParent(parentOrg, pathToParents);
+                }
+            }
+        }
+
 
         public async Task<List<ClientViewModel>> GetClientsForOrganizationAsync(int organizationId)
         {

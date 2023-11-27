@@ -6,8 +6,14 @@ using EDS_Backend_final.Services;
 using EDS_Backend_final.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Net.Mail;
+using System.Net.Mime;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -109,9 +115,78 @@ namespace EDS_Backend_final.Controllers
 
             var createdJob = await _jobService.CreateJobAsync(_mapper.Map<Job>(jobEntity));
             string serializedJob = JsonSerializer.Serialize(createdJob, jsonSerializerOptions);
+
+            var templateColumnsIds = await _dbContext.TemplateColumns
+                .Where(tc => tc.TemplateID == job.TemplateID)
+                .Select(tc => tc.ColumnsID)
+                .ToListAsync();
+             
+            int[] columnsIdsArray = templateColumnsIds.ToArray();
+             
+            var allColumns = await _dbContext.Columns
+                .Where(c => columnsIdsArray.Contains(c.ColumnsID))
+                .ToListAsync(); 
+
+            var columnDictionary = allColumns.ToDictionary(c => c.ColumnsID, c => c.ColumnName);
+             
+            var orderedColumnNames = new List<string>();
+             
+            foreach (var columnId in columnsIdsArray)
+            {
+                if (columnDictionary.TryGetValue(columnId, out string columnName))
+                {
+                    orderedColumnNames.Add(columnName);
+                }
+            }
+              
+
+            string[] columnNamesArray = orderedColumnNames.ToArray();
+
+            var template = await _dbContext.Template.FindAsync(job.TemplateID);
+            string templateName = template?.TemplateName ?? "DefaultTemplateName"; // Set a default name if the template is not found
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Columns");
+                 
+                for (int i = 0; i < columnNamesArray.Length; i++)
+                {
+                    worksheet.Cells[1, i + 1].Value = columnNamesArray[i];
+                     
+                    for (int j = 0; j < 5; j++)
+                    {
+                        worksheet.Cells[j + 2, i + 1].Value = $"{columnNamesArray[i]} - Record {j + 1}";
+                    }
+                }
+                 
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
+
+                string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                string filePath = Path.Combine(downloadsPath, $"{templateName}.xlsx");
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    stream.Position = 0;
+                    await stream.CopyToAsync(fileStream);
+                }
+
+                // Replace "recipientEmail" with the actual recipient's email address
+                string recipientEmail = "zamaan.net.dev@gmail.com";
+
+                // Call the method to send the email with the generated Excel file as an attachment
+                await _jobService.SendEmailWithAttachment(filePath, recipientEmail);
+            }
+             
             return Content(serializedJob, "application/json");
 
         }
+
+        
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateJob(int id, [FromBody] JobViewModel job)

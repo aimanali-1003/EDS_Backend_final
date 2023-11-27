@@ -21,5 +21,7 @@ namespace EDS_Backend_final.Models
         public List<Client> Clients { get; set; }
 
         public List<OrgLevel> Levels { get; set; }
+
+        public string PathToParents { get; set; }
     }
 }

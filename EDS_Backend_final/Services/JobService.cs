@@ -3,6 +3,9 @@ using EDS_Backend_final.Interfaces;
 using EDS_Backend_final.Models;
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
+using System.Net.Mime;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace EDS_Backend_final.Services
@@ -54,6 +57,29 @@ namespace EDS_Backend_final.Services
         public async Task<Job> GetJobWithRelatedEntitiesAsync(int jobId)
         {
             return await _jobDAL.GetJobWithRelatedEntitiesAsync(jobId);
+        }
+
+
+        public async Task SendEmailWithAttachment(string filePath, string recipientEmail)
+        {
+
+            var message = new MailMessage();
+            message.From = new MailAddress("testingextractnoreply@gmail.com");
+            message.To.Add(new MailAddress(recipientEmail));
+            message.Subject = "Excel File Attachment";
+            message.Body = "Please find the attached Excel file.";
+
+            var attachment = new Attachment(filePath, MediaTypeNames.Application.Octet);
+            message.Attachments.Add(attachment);
+
+            using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+            {
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential("testingextractnoreply@gmail.com", "ylnj lwgj botn wmog");
+                smtp.EnableSsl = true;
+
+                await smtp.SendMailAsync(message);
+            }
         }
 
     }

@@ -16,5 +16,6 @@ namespace EDS_Backend_final.Interfaces
         Task<int?> GetFileFormatIdAsync(string type);
 
         Task<Job> GetJobWithRelatedEntitiesAsync(int jobId);
+        Task SendEmailWithAttachment(string filePath, string recipientEmail);
     }
 }
